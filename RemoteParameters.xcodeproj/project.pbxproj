@@ -1,0 +1,435 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F43758AD22307033006307D0 /* RemoteParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = F43758AB22307033006307D0 /* RemoteParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F43758BA223070C4006307D0 /* Parameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B3223070C3006307D0 /* Parameter.swift */; };
+		F43758BB223070C4006307D0 /* CodableParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B4223070C4006307D0 /* CodableParameter.swift */; };
+		F43758BC223070C4006307D0 /* RemoteParameterServerBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B5223070C4006307D0 /* RemoteParameterServerBrowser.swift */; };
+		F43758BD223070C4006307D0 /* RemoteParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B6223070C4006307D0 /* RemoteParameters.swift */; };
+		F43758BE223070C4006307D0 /* RemoteParameterSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B7223070C4006307D0 /* RemoteParameterSession.swift */; };
+		F43758BF223070C4006307D0 /* ParameterServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B8223070C4006307D0 /* ParameterServer.swift */; };
+		F43758C0223070C4006307D0 /* RemoteParameterReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B9223070C4006307D0 /* RemoteParameterReceiver.swift */; };
+		F43758C3223070D7006307D0 /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43758C2223070D7006307D0 /* MultipeerConnectivity.framework */; };
+		F43758C62230712F006307D0 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43758C42230712F006307D0 /* RxCocoa.framework */; };
+		F43758C72230712F006307D0 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43758C52230712F006307D0 /* RxSwift.framework */; };
+		F43758CA223071C2006307D0 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758C9223071C2006307D0 /* UIColor+Hex.swift */; };
+		F43758CC22307CC3006307D0 /* RemoteParameterAdvertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758CB22307CC3006307D0 /* RemoteParameterAdvertiser.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F43758A822307033006307D0 /* RemoteParameters.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RemoteParameters.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F43758AB22307033006307D0 /* RemoteParameters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteParameters.h; sourceTree = "<group>"; };
+		F43758AC22307033006307D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F43758B3223070C3006307D0 /* Parameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parameter.swift; sourceTree = "<group>"; };
+		F43758B4223070C4006307D0 /* CodableParameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodableParameter.swift; sourceTree = "<group>"; };
+		F43758B5223070C4006307D0 /* RemoteParameterServerBrowser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteParameterServerBrowser.swift; sourceTree = "<group>"; };
+		F43758B6223070C4006307D0 /* RemoteParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteParameters.swift; sourceTree = "<group>"; };
+		F43758B7223070C4006307D0 /* RemoteParameterSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteParameterSession.swift; sourceTree = "<group>"; };
+		F43758B8223070C4006307D0 /* ParameterServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParameterServer.swift; sourceTree = "<group>"; };
+		F43758B9223070C4006307D0 /* RemoteParameterReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteParameterReceiver.swift; sourceTree = "<group>"; };
+		F43758C2223070D7006307D0 /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
+		F43758C42230712F006307D0 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
+		F43758C52230712F006307D0 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
+		F43758C9223071C2006307D0 /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
+		F43758CB22307CC3006307D0 /* RemoteParameterAdvertiser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteParameterAdvertiser.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F43758A522307033006307D0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F43758C62230712F006307D0 /* RxCocoa.framework in Frameworks */,
+				F43758C3223070D7006307D0 /* MultipeerConnectivity.framework in Frameworks */,
+				F43758C72230712F006307D0 /* RxSwift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F437589E22307033006307D0 = {
+			isa = PBXGroup;
+			children = (
+				F43758AA22307033006307D0 /* RemoteParameters */,
+				F43758A922307033006307D0 /* Products */,
+				F43758C1223070D7006307D0 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		F43758A922307033006307D0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F43758A822307033006307D0 /* RemoteParameters.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F43758AA22307033006307D0 /* RemoteParameters */ = {
+			isa = PBXGroup;
+			children = (
+				F43758C9223071C2006307D0 /* UIColor+Hex.swift */,
+				F43758CD22307E1E006307D0 /* Remote Parameters */,
+				F43758B3223070C3006307D0 /* Parameter.swift */,
+				F43758B8223070C4006307D0 /* ParameterServer.swift */,
+				F43758AC22307033006307D0 /* Info.plist */,
+			);
+			path = RemoteParameters;
+			sourceTree = "<group>";
+		};
+		F43758C1223070D7006307D0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F43758C42230712F006307D0 /* RxCocoa.framework */,
+				F43758C52230712F006307D0 /* RxSwift.framework */,
+				F43758C2223070D7006307D0 /* MultipeerConnectivity.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F43758CD22307E1E006307D0 /* Remote Parameters */ = {
+			isa = PBXGroup;
+			children = (
+				F43758B4223070C4006307D0 /* CodableParameter.swift */,
+				F43758CB22307CC3006307D0 /* RemoteParameterAdvertiser.swift */,
+				F43758B9223070C4006307D0 /* RemoteParameterReceiver.swift */,
+				F43758B6223070C4006307D0 /* RemoteParameters.swift */,
+				F43758B5223070C4006307D0 /* RemoteParameterServerBrowser.swift */,
+				F43758B7223070C4006307D0 /* RemoteParameterSession.swift */,
+				F43758AB22307033006307D0 /* RemoteParameters.h */,
+			);
+			path = "Remote Parameters";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		F43758A322307033006307D0 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F43758AD22307033006307D0 /* RemoteParameters.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		F43758A722307033006307D0 /* RemoteParameters */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F43758B022307033006307D0 /* Build configuration list for PBXNativeTarget "RemoteParameters" */;
+			buildPhases = (
+				F43758A322307033006307D0 /* Headers */,
+				F43758A422307033006307D0 /* Sources */,
+				F43758A522307033006307D0 /* Frameworks */,
+				F43758A622307033006307D0 /* Resources */,
+				F43758C822307165006307D0 /* Carthage */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RemoteParameters;
+			productName = RemoteParameters;
+			productReference = F43758A822307033006307D0 /* RemoteParameters.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F437589F22307033006307D0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = "Avi Cieplinski";
+				TargetAttributes = {
+					F43758A722307033006307D0 = {
+						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
+					};
+				};
+			};
+			buildConfigurationList = F43758A222307033006307D0 /* Build configuration list for PBXProject "RemoteParameters" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = F437589E22307033006307D0;
+			productRefGroup = F43758A922307033006307D0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F43758A722307033006307D0 /* RemoteParameters */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F43758A622307033006307D0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		F43758C822307165006307D0 /* Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
+			);
+			name = Carthage;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n/usr/local/bin/carthage copy-frameworks\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F43758A422307033006307D0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F43758CC22307CC3006307D0 /* RemoteParameterAdvertiser.swift in Sources */,
+				F43758BB223070C4006307D0 /* CodableParameter.swift in Sources */,
+				F43758CA223071C2006307D0 /* UIColor+Hex.swift in Sources */,
+				F43758BD223070C4006307D0 /* RemoteParameters.swift in Sources */,
+				F43758C0223070C4006307D0 /* RemoteParameterReceiver.swift in Sources */,
+				F43758BF223070C4006307D0 /* ParameterServer.swift in Sources */,
+				F43758BE223070C4006307D0 /* RemoteParameterSession.swift in Sources */,
+				F43758BC223070C4006307D0 /* RemoteParameterServerBrowser.swift in Sources */,
+				F43758BA223070C4006307D0 /* Parameter.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		F43758AE22307033006307D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		F43758AF22307033006307D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		F43758B122307033006307D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = JVL9YPNS8B;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = RemoteParameters/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.avic.RemoteParameters;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F43758B222307033006307D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = JVL9YPNS8B;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = RemoteParameters/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.avic.RemoteParameters;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F43758A222307033006307D0 /* Build configuration list for PBXProject "RemoteParameters" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F43758AE22307033006307D0 /* Debug */,
+				F43758AF22307033006307D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F43758B022307033006307D0 /* Build configuration list for PBXNativeTarget "RemoteParameters" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F43758B122307033006307D0 /* Debug */,
+				F43758B222307033006307D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F437589F22307033006307D0 /* Project object */;
+}
