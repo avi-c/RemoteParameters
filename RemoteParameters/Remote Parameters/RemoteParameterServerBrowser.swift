@@ -42,7 +42,7 @@ extension RemoteParameterServerBrowser : MCNearbyServiceBrowserDelegate {
     public func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
         print("found peer: \(peerID) with info: \(String(describing: info))")
         guard peerID != myself.peerID else {
-            os_log(.info, "found myself, ignoring")
+            print("found myself, ignoring")
             return
         }
         DispatchQueue.main.async {
