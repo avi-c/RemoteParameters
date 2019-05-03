@@ -60,11 +60,7 @@ public class BoolParameter: NSObject, Parameter {
     public var dataType: ParameterDataType = .bool
     public var category: String = ""
     public var name: String = ""
-    public var defaultValue: Bool = false {
-        didSet {
-            revertToDefault()
-        }
-    }
+    public var defaultValue: Bool = false
     public var relay: BehaviorRelay<Bool> = BehaviorRelay<Bool>(value: false)
     public var persisted: Bool = true
 
@@ -91,11 +87,7 @@ public class FloatParameter: NSObject, Parameter {
     public var maxValue: Float = Float(10)
     public var stepValue: Float = Float(0.5)
     public var precision: Float = Float(0.1)
-    public var defaultValue: Float = Float(0) {
-        didSet {
-            revertToDefault()
-        }
-    }
+    public var defaultValue: Float = Float(0)
 
     public override init() {
         super.init()
@@ -150,11 +142,7 @@ public class IntParameter: NSObject, Parameter {
     public var minValue: Int = Int(0)
     public var maxValue: Int = Int(10)
     public var stepValue: Int = Int(1)
-    public var defaultValue: Int = Int(0) {
-        didSet {
-            revertToDefault()
-        }
-    }
+    public var defaultValue: Int = Int(0)
 
     public override init() {
         super.init()
@@ -221,11 +209,7 @@ public class StringParameter: NSObject, Parameter {
     public var dataType: ParameterDataType = .string
     public var category: String = ""
     public var name: String = ""
-    public var defaultValue: String = "" {
-        didSet {
-            revertToDefault()
-        }
-    }
+    public var defaultValue: String = ""
     public var relay: BehaviorRelay<String> = BehaviorRelay<String>(value: "")
     public var persisted: Bool = true
 
@@ -274,11 +258,7 @@ public class ColorParameter: NSObject, Parameter {
     public var dataType: ParameterDataType = .color
     public var category: String = ""
     public var name: String = ""
-    public var defaultValue: UIColor = UIColor.white {
-        didSet {
-            revertToDefault()
-        }
-    }
+    public var defaultValue: UIColor = UIColor.white
     public var relay: BehaviorRelay<UIColor> = BehaviorRelay<UIColor>(value: UIColor.white)
     public var persisted: Bool = true
 
