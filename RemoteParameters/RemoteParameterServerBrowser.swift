@@ -15,7 +15,7 @@ public class RemoteParameterServerBrowser: NSObject {
     let myself: RemoteParameterReceiver
     public weak var delegate: RemoteParameterServerBrowserDelegate?
     private let serviceBrowser : MCNearbyServiceBrowser
-    private var servers: Set<ParameterServer> = []
+    private var servers: Set<RemoteParameterServer> = []
 
     public init(myself: RemoteParameterReceiver, serviceType: String) {
         self.myself = myself
@@ -49,7 +49,7 @@ extension RemoteParameterServerBrowser : MCNearbyServiceBrowserDelegate {
             let server = RemoteParameterReceiver(peerID: peerID)
             let serverName = info?[RemoteParameterAttribute.name]
 
-            let connection = ParameterServer(host: server, name: serverName)
+            let connection = RemoteParameterServer(host: server, name: serverName)
             self.servers.insert(connection)
             self.delegate?.parameterServerBrowser(self, sawServers: Array(self.servers))
         }
@@ -70,6 +70,6 @@ extension RemoteParameterServerBrowser : MCNearbyServiceBrowserDelegate {
 }
 
 public protocol RemoteParameterServerBrowserDelegate: class {
-    func parameterServerBrowser(_ browser: RemoteParameterServerBrowser, sawServers: [ParameterServer])
-    func parameterServerBrowser(_ browser: RemoteParameterServerBrowser, lostServers: [ParameterServer])
+    func parameterServerBrowser(_ browser: RemoteParameterServerBrowser, sawServers: [RemoteParameterServer])
+    func parameterServerBrowser(_ browser: RemoteParameterServerBrowser, lostServers: [RemoteParameterServer])
 }
