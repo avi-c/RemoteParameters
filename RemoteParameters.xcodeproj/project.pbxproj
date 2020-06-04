@@ -15,14 +15,14 @@
 		F495C2DB2488A80100A8FE78 /* ParametersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F495C2D92488A7DA00A8FE78 /* ParametersViewController.swift */; };
 		F495C2DC2488A81400A8FE78 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43758C42230712F006307D0 /* RxCocoa.framework */; };
 		F495C2DD2488A81700A8FE78 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43758C52230712F006307D0 /* RxSwift.framework */; };
-		F495C2DE2488A82200A8FE78 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758C9223071C2006307D0 /* UIColor+Hex.swift */; };
-		F495C2E32488AA5600A8FE78 /* RemoteParameterSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B7223070C4006307D0 /* RemoteParameterSession.swift */; };
-		F495C2E42488AA5600A8FE78 /* RemoteParameterServerBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B5223070C4006307D0 /* RemoteParameterServerBrowser.swift */; };
-		F495C2E52488AA5600A8FE78 /* ParameterServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B8223070C4006307D0 /* ParameterServer.swift */; };
-		F495C2E62488AA5600A8FE78 /* RemoteParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B6223070C4006307D0 /* RemoteParameters.swift */; };
-		F495C2E72488AA5600A8FE78 /* RemoteParameterAdvertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758CB22307CC3006307D0 /* RemoteParameterAdvertiser.swift */; };
-		F495C2E82488AA5600A8FE78 /* RemoteParameterReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B9223070C4006307D0 /* RemoteParameterReceiver.swift */; };
-		F495C2E92488AA5600A8FE78 /* CodableParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B4223070C4006307D0 /* CodableParameter.swift */; };
+		F49D16832488B38100B14B67 /* ParameterServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B8223070C4006307D0 /* ParameterServer.swift */; };
+		F49D16842488B38B00B14B67 /* RemoteParameterSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B7223070C4006307D0 /* RemoteParameterSession.swift */; };
+		F49D16852488B38F00B14B67 /* RemoteParameterServerBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B5223070C4006307D0 /* RemoteParameterServerBrowser.swift */; };
+		F49D16862488B39300B14B67 /* RemoteParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B6223070C4006307D0 /* RemoteParameters.swift */; };
+		F49D16872488B39700B14B67 /* RemoteParameterReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B9223070C4006307D0 /* RemoteParameterReceiver.swift */; };
+		F49D16882488B39B00B14B67 /* RemoteParameterAdvertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758CB22307CC3006307D0 /* RemoteParameterAdvertiser.swift */; };
+		F49D16892488B56F00B14B67 /* CodableParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B4223070C4006307D0 /* CodableParameter.swift */; };
+		F49D168B2488B5A600B14B67 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758C9223071C2006307D0 /* UIColor+Hex.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -254,6 +254,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F49D16882488B39B00B14B67 /* RemoteParameterAdvertiser.swift in Sources */,
+				F49D16872488B39700B14B67 /* RemoteParameterReceiver.swift in Sources */,
+				F49D16842488B38B00B14B67 /* RemoteParameterSession.swift in Sources */,
+				F49D16862488B39300B14B67 /* RemoteParameters.swift in Sources */,
+				F49D16852488B38F00B14B67 /* RemoteParameterServerBrowser.swift in Sources */,
+				F49D16892488B56F00B14B67 /* CodableParameter.swift in Sources */,
+				F49D16832488B38100B14B67 /* ParameterServer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,16 +268,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F495C2E82488AA5600A8FE78 /* RemoteParameterReceiver.swift in Sources */,
-				F495C2E72488AA5600A8FE78 /* RemoteParameterAdvertiser.swift in Sources */,
-				F495C2E62488AA5600A8FE78 /* RemoteParameters.swift in Sources */,
-				F495C2E32488AA5600A8FE78 /* RemoteParameterSession.swift in Sources */,
-				F495C2DE2488A82200A8FE78 /* UIColor+Hex.swift in Sources */,
-				F495C2E52488AA5600A8FE78 /* ParameterServer.swift in Sources */,
-				F495C2E92488AA5600A8FE78 /* CodableParameter.swift in Sources */,
+				F49D168B2488B5A600B14B67 /* UIColor+Hex.swift in Sources */,
 				F495C2DB2488A80100A8FE78 /* ParametersViewController.swift in Sources */,
 				F495C2D82488A76300A8FE78 /* Parameter.swift in Sources */,
-				F495C2E42488AA5600A8FE78 /* RemoteParameterServerBrowser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
