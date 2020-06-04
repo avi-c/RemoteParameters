@@ -7,20 +7,33 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F43758AD22307033006307D0 /* RemoteParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = F43758AB22307033006307D0 /* RemoteParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F43758BA223070C4006307D0 /* Parameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B3223070C3006307D0 /* Parameter.swift */; };
-		F43758BB223070C4006307D0 /* CodableParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B4223070C4006307D0 /* CodableParameter.swift */; };
-		F43758BC223070C4006307D0 /* RemoteParameterServerBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B5223070C4006307D0 /* RemoteParameterServerBrowser.swift */; };
-		F43758BD223070C4006307D0 /* RemoteParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B6223070C4006307D0 /* RemoteParameters.swift */; };
-		F43758BE223070C4006307D0 /* RemoteParameterSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B7223070C4006307D0 /* RemoteParameterSession.swift */; };
-		F43758BF223070C4006307D0 /* ParameterServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B8223070C4006307D0 /* ParameterServer.swift */; };
-		F43758C0223070C4006307D0 /* RemoteParameterReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B9223070C4006307D0 /* RemoteParameterReceiver.swift */; };
 		F43758C3223070D7006307D0 /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43758C2223070D7006307D0 /* MultipeerConnectivity.framework */; };
 		F43758C62230712F006307D0 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43758C42230712F006307D0 /* RxCocoa.framework */; };
 		F43758C72230712F006307D0 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43758C52230712F006307D0 /* RxSwift.framework */; };
-		F43758CA223071C2006307D0 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758C9223071C2006307D0 /* UIColor+Hex.swift */; };
-		F43758CC22307CC3006307D0 /* RemoteParameterAdvertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758CB22307CC3006307D0 /* RemoteParameterAdvertiser.swift */; };
+		F495C2D42488A75300A8FE78 /* Parameters.h in Headers */ = {isa = PBXBuildFile; fileRef = F495C2D22488A75300A8FE78 /* Parameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F495C2D82488A76300A8FE78 /* Parameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B3223070C3006307D0 /* Parameter.swift */; };
+		F495C2DB2488A80100A8FE78 /* ParametersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F495C2D92488A7DA00A8FE78 /* ParametersViewController.swift */; };
+		F495C2DC2488A81400A8FE78 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43758C42230712F006307D0 /* RxCocoa.framework */; };
+		F495C2DD2488A81700A8FE78 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43758C52230712F006307D0 /* RxSwift.framework */; };
+		F495C2DE2488A82200A8FE78 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758C9223071C2006307D0 /* UIColor+Hex.swift */; };
+		F495C2E32488AA5600A8FE78 /* RemoteParameterSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B7223070C4006307D0 /* RemoteParameterSession.swift */; };
+		F495C2E42488AA5600A8FE78 /* RemoteParameterServerBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B5223070C4006307D0 /* RemoteParameterServerBrowser.swift */; };
+		F495C2E52488AA5600A8FE78 /* ParameterServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B8223070C4006307D0 /* ParameterServer.swift */; };
+		F495C2E62488AA5600A8FE78 /* RemoteParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B6223070C4006307D0 /* RemoteParameters.swift */; };
+		F495C2E72488AA5600A8FE78 /* RemoteParameterAdvertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758CB22307CC3006307D0 /* RemoteParameterAdvertiser.swift */; };
+		F495C2E82488AA5600A8FE78 /* RemoteParameterReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B9223070C4006307D0 /* RemoteParameterReceiver.swift */; };
+		F495C2E92488AA5600A8FE78 /* CodableParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B4223070C4006307D0 /* CodableParameter.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F495C2DF2488A83300A8FE78 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F437589F22307033006307D0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F495C2CF2488A75300A8FE78;
+			remoteInfo = Parameters;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		F43758A822307033006307D0 /* RemoteParameters.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RemoteParameters.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -38,6 +51,10 @@
 		F43758C52230712F006307D0 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		F43758C9223071C2006307D0 /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		F43758CB22307CC3006307D0 /* RemoteParameterAdvertiser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteParameterAdvertiser.swift; sourceTree = "<group>"; };
+		F495C2D02488A75300A8FE78 /* Parameters.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Parameters.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F495C2D22488A75300A8FE78 /* Parameters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Parameters.h; sourceTree = "<group>"; };
+		F495C2D32488A75300A8FE78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F495C2D92488A7DA00A8FE78 /* ParametersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +68,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F495C2CD2488A75300A8FE78 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F495C2DD2488A81700A8FE78 /* RxSwift.framework in Frameworks */,
+				F495C2DC2488A81400A8FE78 /* RxCocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -58,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				F43758AA22307033006307D0 /* RemoteParameters */,
+				F495C2D12488A75300A8FE78 /* Parameters */,
 				F43758A922307033006307D0 /* Products */,
 				F43758C1223070D7006307D0 /* Frameworks */,
 			);
@@ -67,6 +94,7 @@
 			isa = PBXGroup;
 			children = (
 				F43758A822307033006307D0 /* RemoteParameters.framework */,
+				F495C2D02488A75300A8FE78 /* Parameters.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -75,8 +103,13 @@
 			isa = PBXGroup;
 			children = (
 				F43758C9223071C2006307D0 /* UIColor+Hex.swift */,
-				F43758CD22307E1E006307D0 /* Remote Parameters */,
-				F43758B3223070C3006307D0 /* Parameter.swift */,
+				F43758B4223070C4006307D0 /* CodableParameter.swift */,
+				F43758CB22307CC3006307D0 /* RemoteParameterAdvertiser.swift */,
+				F43758B9223070C4006307D0 /* RemoteParameterReceiver.swift */,
+				F43758B6223070C4006307D0 /* RemoteParameters.swift */,
+				F43758B5223070C4006307D0 /* RemoteParameterServerBrowser.swift */,
+				F43758B7223070C4006307D0 /* RemoteParameterSession.swift */,
+				F43758AB22307033006307D0 /* RemoteParameters.h */,
 				F43758B8223070C4006307D0 /* ParameterServer.swift */,
 				F43758AC22307033006307D0 /* Info.plist */,
 			);
@@ -93,18 +126,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		F43758CD22307E1E006307D0 /* Remote Parameters */ = {
+		F495C2D12488A75300A8FE78 /* Parameters */ = {
 			isa = PBXGroup;
 			children = (
-				F43758B4223070C4006307D0 /* CodableParameter.swift */,
-				F43758CB22307CC3006307D0 /* RemoteParameterAdvertiser.swift */,
-				F43758B9223070C4006307D0 /* RemoteParameterReceiver.swift */,
-				F43758B6223070C4006307D0 /* RemoteParameters.swift */,
-				F43758B5223070C4006307D0 /* RemoteParameterServerBrowser.swift */,
-				F43758B7223070C4006307D0 /* RemoteParameterSession.swift */,
-				F43758AB22307033006307D0 /* RemoteParameters.h */,
+				F43758B3223070C3006307D0 /* Parameter.swift */,
+				F495C2D92488A7DA00A8FE78 /* ParametersViewController.swift */,
+				F495C2D22488A75300A8FE78 /* Parameters.h */,
+				F495C2D32488A75300A8FE78 /* Info.plist */,
 			);
-			path = "Remote Parameters";
+			path = Parameters;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -114,7 +144,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F43758AD22307033006307D0 /* RemoteParameters.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F495C2CB2488A75300A8FE78 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F495C2D42488A75300A8FE78 /* Parameters.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,10 +170,29 @@
 			buildRules = (
 			);
 			dependencies = (
+				F495C2E02488A83300A8FE78 /* PBXTargetDependency */,
 			);
 			name = RemoteParameters;
 			productName = RemoteParameters;
 			productReference = F43758A822307033006307D0 /* RemoteParameters.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		F495C2CF2488A75300A8FE78 /* Parameters */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F495C2D72488A75300A8FE78 /* Build configuration list for PBXNativeTarget "Parameters" */;
+			buildPhases = (
+				F495C2CB2488A75300A8FE78 /* Headers */,
+				F495C2CC2488A75300A8FE78 /* Sources */,
+				F495C2CD2488A75300A8FE78 /* Frameworks */,
+				F495C2CE2488A75300A8FE78 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Parameters;
+			productName = Parameters;
+			productReference = F495C2D02488A75300A8FE78 /* Parameters.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -150,7 +206,11 @@
 				TargetAttributes = {
 					F43758A722307033006307D0 = {
 						CreatedOnToolsVersion = 10.1;
-						LastSwiftMigration = 1010;
+						LastSwiftMigration = 1150;
+					};
+					F495C2CF2488A75300A8FE78 = {
+						CreatedOnToolsVersion = 11.5;
+						LastSwiftMigration = 1150;
 					};
 				};
 			};
@@ -167,12 +227,20 @@
 			projectRoot = "";
 			targets = (
 				F43758A722307033006307D0 /* RemoteParameters */,
+				F495C2CF2488A75300A8FE78 /* Parameters */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		F43758A622307033006307D0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F495C2CE2488A75300A8FE78 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -186,19 +254,35 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F43758CC22307CC3006307D0 /* RemoteParameterAdvertiser.swift in Sources */,
-				F43758BB223070C4006307D0 /* CodableParameter.swift in Sources */,
-				F43758CA223071C2006307D0 /* UIColor+Hex.swift in Sources */,
-				F43758BD223070C4006307D0 /* RemoteParameters.swift in Sources */,
-				F43758C0223070C4006307D0 /* RemoteParameterReceiver.swift in Sources */,
-				F43758BF223070C4006307D0 /* ParameterServer.swift in Sources */,
-				F43758BE223070C4006307D0 /* RemoteParameterSession.swift in Sources */,
-				F43758BC223070C4006307D0 /* RemoteParameterServerBrowser.swift in Sources */,
-				F43758BA223070C4006307D0 /* Parameter.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F495C2CC2488A75300A8FE78 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F495C2E82488AA5600A8FE78 /* RemoteParameterReceiver.swift in Sources */,
+				F495C2E72488AA5600A8FE78 /* RemoteParameterAdvertiser.swift in Sources */,
+				F495C2E62488AA5600A8FE78 /* RemoteParameters.swift in Sources */,
+				F495C2E32488AA5600A8FE78 /* RemoteParameterSession.swift in Sources */,
+				F495C2DE2488A82200A8FE78 /* UIColor+Hex.swift in Sources */,
+				F495C2E52488AA5600A8FE78 /* ParameterServer.swift in Sources */,
+				F495C2E92488AA5600A8FE78 /* CodableParameter.swift in Sources */,
+				F495C2DB2488A80100A8FE78 /* ParametersViewController.swift in Sources */,
+				F495C2D82488A76300A8FE78 /* Parameter.swift in Sources */,
+				F495C2E42488AA5600A8FE78 /* RemoteParameterServerBrowser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F495C2E02488A83300A8FE78 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F495C2CF2488A75300A8FE78 /* Parameters */;
+			targetProxy = F495C2DF2488A83300A8FE78 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		F43758AE22307033006307D0 /* Debug */ = {
@@ -340,7 +424,7 @@
 				);
 				INFOPLIST_FILE = RemoteParameters/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -350,7 +434,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -372,13 +456,71 @@
 				);
 				INFOPLIST_FILE = RemoteParameters/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.avic.RemoteParameters;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		F495C2D52488A75300A8FE78 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = GJZR2MEM28;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = Parameters/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mapbox.Parameters;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F495C2D62488A75300A8FE78 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = GJZR2MEM28;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = Parameters/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mapbox.Parameters;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
@@ -403,6 +545,15 @@
 			buildConfigurations = (
 				F43758B122307033006307D0 /* Debug */,
 				F43758B222307033006307D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F495C2D72488A75300A8FE78 /* Build configuration list for PBXNativeTarget "Parameters" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F495C2D52488A75300A8FE78 /* Debug */,
+				F495C2D62488A75300A8FE78 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

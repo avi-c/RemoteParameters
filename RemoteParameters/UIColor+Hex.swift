@@ -1,6 +1,5 @@
 //
-//  UIColor.swift
-//  AR Design
+//  UIColor+Hex.swift
 //
 //  Created by Avi Cieplinski on 1/15/19.
 //  Copyright © 2019 Mapbox. All rights reserved.

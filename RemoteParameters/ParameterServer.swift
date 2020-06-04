@@ -1,5 +1,5 @@
 //
-//  ParameterServer.swift
+//  RemoteParameterServer.swift
 //  ParametersRemoteControl
 //
 //  Created by Avi Cieplinski on 9/18/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct ParameterServer: Hashable {
+public struct RemoteParameterServer: Hashable {
     public var name: String
     public var host: RemoteParameterReceiver
 

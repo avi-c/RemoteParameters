@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parameters
 
 public struct CodableParameter: Codable {
     public var uuid: String
