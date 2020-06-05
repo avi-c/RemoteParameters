@@ -112,7 +112,7 @@ public class BoolParameter: Parameter, Codable {
 
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
+        self.dataType = .bool
         self.category = try container.decode(String.self, forKey: .category)
         self.name = try container.decode(String.self, forKey: .name)
         self.value = try container.decode(Bool.self, forKey: .value)
@@ -182,7 +182,7 @@ public class FloatParameter: Parameter, Codable {
 
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
+        self.dataType = .float
         self.category = try container.decode(String.self, forKey: .category)
         self.name = try container.decode(String.self, forKey: .name)
         self.minValue = try container.decode(Float.self, forKey: .minValue)
@@ -259,7 +259,7 @@ public class IntParameter: Parameter, Codable {
 
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
+        self.dataType = .int
         self.category = try container.decode(String.self, forKey: .category)
         self.name = try container.decode(String.self, forKey: .name)
         self.minValue = try container.decode(Int.self, forKey: .minValue)
@@ -332,7 +332,7 @@ public class PickerParameter: NSObject, Parameter, Codable {
 
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
+        self.dataType = .picker
         self.category = try container.decode(String.self, forKey: .category)
         self.name = try container.decode(String.self, forKey: .name)
         self.pickerItems = try container.decodeIfPresent([String].self, forKey: .pickerItems)
@@ -429,7 +429,7 @@ public class StringParameter: Parameter, Codable {
 
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
+        self.dataType = .string
         self.category = try container.decode(String.self, forKey: .category)
         self.name = try container.decode(String.self, forKey: .name)
         self.value = try container.decode(String.self, forKey: .value)
@@ -497,7 +497,7 @@ public class ColorParameter: Parameter, Codable {
 
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
+        self.dataType = .color
         self.category = try container.decode(String.self, forKey: .category)
         self.name = try container.decode(String.self, forKey: .name)
         let stringValue = try container.decode(String.self, forKey: .value)
@@ -569,7 +569,7 @@ public class SegmentedParameter: Parameter, Codable {
 
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
+        self.dataType = .segmented
         self.category = try container.decode(String.self, forKey: .category)
         self.name = try container.decode(String.self, forKey: .name)
         self.value = try container.decode(Int.self, forKey: .value)
@@ -629,7 +629,7 @@ public class StaticTextParameter: Parameter, Codable {
 
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
+        self.dataType = .staticText
         self.category = try container.decode(String.self, forKey: .category)
         self.name = try container.decode(String.self, forKey: .name)
         self.value = try container.decode(String.self, forKey: .value)
