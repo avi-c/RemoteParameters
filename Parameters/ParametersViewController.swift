@@ -45,7 +45,7 @@ public class ParametersViewController: UIViewController, UITableViewDataSource, 
         return UIColor.darkText
     }
 
-    weak var parametersViewControllerDelegate: ParametersViewControllerDelegate?
+    public weak var parametersViewControllerDelegate: ParametersViewControllerDelegate?
 
     static let pickerViewHeight = CGFloat(160)
 
