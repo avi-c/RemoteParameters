@@ -1,6 +1,6 @@
 //
 //  Parameter.swift
-//  Apex
+//  Parameters
 //
 //  Created by Avi Cieplinski on 1/29/19.
 //  Copyright © 2019 Mapbox. All rights reserved.
@@ -11,12 +11,32 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-public enum ParameterDataType: Int, Decodable {
+// TODO
+// 1. Remote Parameters
+
+struct ParameterCategory {
+    let name: String
+    let entries: [Parameter]
+    let isDebug: Bool
+    var disclosed: Bool
+
+    init(name: String, entries: [Parameter], isDebug: Bool = false, disclosed: Bool = false) {
+        self.name = name
+        self.entries = entries
+        self.isDebug = isDebug
+        self.disclosed = disclosed
+    }
+}
+
+public enum ParameterDataType: Int, Codable {
     case bool = 0
     case int = 1
     case float = 2
     case string = 3
     case color = 4
+    case segmented = 5
+    case staticText = 6
+    case picker = 7
 }
 
 public protocol Parameter {
@@ -24,249 +44,593 @@ public protocol Parameter {
     var category: String { get set }
     var name: String { get set }
     var dataType: ParameterDataType { get set }
-    var dictionaryRepresentation: [String: Any?] { get set }
-    var persisted: Bool { get set }
 
-    var isNumeric: Bool { get }
+    var observers: [ParameterObserver] { get }
+
+    func isNumeric() -> Bool
     func revertToDefault()
 }
 
-public class BoolParameter: NSObject, Parameter {
-    public var dictionaryRepresentation: [String: Any?] {
-        get {
-            var parameterDictionary: [String: Any?] = [:]
-            parameterDictionary["uuid"] = uuid
-            parameterDictionary["category"] = category
-            parameterDictionary["name"] = name
-            parameterDictionary["dataType"] = dataType.rawValue
-            parameterDictionary["value"] = relay.value
-            parameterDictionary["defaultValue"] = defaultValue
-            return parameterDictionary
-        }
+public protocol ParameterObserver {
+    func didUpdate(parameter: Parameter)
+}
 
-        set {
-            self.category = newValue["category"] as? String ?? ""
-            self.name = newValue["name"] as? String ?? ""
-            self.defaultValue = newValue["defaultValue"] as? Bool ?? false
-            let value = newValue["value"] as? Bool ?? false
-            relay.accept(value)
+public class BoolParameter: Parameter, Codable {
+    public var uuid: String { return category + "-" + name }
+    public var dataType: ParameterDataType = .bool
+    public var persisted: Bool = true
+    public var category: String = ""
+    public var name: String = ""
+    public var value: Bool = false {
+        didSet {
+            observers.forEach { (observer) in
+                observer.didUpdate(parameter: self)
+            }
+        }
+    }
+    public var defaultValue: Bool = false {
+        didSet {
+            revertToDefault()
         }
     }
 
-    public var uuid: String { return category + "-" + name }
-    public var dataType: ParameterDataType = .bool
-    public var category: String = ""
-    public var name: String = ""
-    public var defaultValue: Bool = false
-    public var relay: BehaviorRelay<Bool> = BehaviorRelay<Bool>(value: false)
-    public var persisted: Bool = true
-
-    public override init() {
-        super.init()
+    public init() {
         revertToDefault()
     }
 
-    public var isNumeric: Bool = false
+    public var observers = [ParameterObserver]()
+
+    enum CodingKeys: String, CodingKey {
+        case uuid
+        case dataType
+        case category
+        case name
+        case value
+        case defaultValue
+    }
+
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
+        self.category = try container.decode(String.self, forKey: .category)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.value = try container.decode(Bool.self, forKey: .value)
+        self.defaultValue = try container.decode(Bool.self, forKey: .defaultValue)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(uuid, forKey: .uuid)
+        try container.encode(dataType, forKey: .dataType)
+        try container.encode(category, forKey: .category)
+        try container.encode(name, forKey: .name)
+        try container.encode(value, forKey: .value)
+        try container.encode(defaultValue, forKey: .defaultValue)
+    }
+
+    public func isNumeric() -> Bool {
+        return false
+    }
 
     public func revertToDefault() {
-        relay.accept(defaultValue)
+        self.value = defaultValue
     }
 }
 
-public class FloatParameter: NSObject, Parameter {
+public class FloatParameter: Parameter, Codable {
     public var uuid: String { return category + "-" + name }
     public var dataType: ParameterDataType = .float
+    public var persisted: Bool = true
     public var category: String = ""
     public var name: String = ""
-    public var relay: BehaviorRelay<Float> = BehaviorRelay<Float>(value: 0)
-    public var persisted: Bool = true
     public var minValue: Float = Float(0)
     public var maxValue: Float = Float(10)
     public var stepValue: Float = Float(0.5)
     public var precision: Float = Float(0.1)
-    public var defaultValue: Float = Float(0)
+    public var value: Float = Float(0.0) {
+        didSet {
+            observers.forEach { (observer) in
+                observer.didUpdate(parameter: self)
+            }
+        }
+    }
+    public var defaultValue: Float = Float(0) {
+        didSet {
+            revertToDefault()
+        }
+    }
 
-    public override init() {
-        super.init()
+    public var observers = [ParameterObserver]()
+
+    public init() {
         revertToDefault()
     }
 
-    public var dictionaryRepresentation: [String: Any?] {
-        get {
-            var parameterDictionary: [String: Any?] = [:]
-            parameterDictionary["uuid"] = uuid
-            parameterDictionary["category"] = category
-            parameterDictionary["name"] = name
-            parameterDictionary["dataType"] = dataType.rawValue
-            parameterDictionary["value"] = relay.value
-            parameterDictionary["minValue"] = minValue
-            parameterDictionary["maxValue"] = maxValue
-            parameterDictionary["stepValue"] = stepValue
-            parameterDictionary["defaultValue"] = defaultValue
-            parameterDictionary["precision"] = precision
-            return parameterDictionary
-        }
-
-        set {
-            self.category = newValue["category"] as? String ?? ""
-            self.name = newValue["name"] as? String ?? ""
-
-            self.minValue = newValue["minValue"] as? Float ?? 0
-            self.maxValue = newValue["maxValue"] as? Float ?? 1
-            self.stepValue = newValue["stepValue"] as? Float ?? 1
-            let value = newValue["value"] as? Float ?? 0.0
-            self.defaultValue = newValue["defaultValue"] as? Float ?? value
-            self.precision = newValue["precision"] as? Float ?? precision
-
-            relay.accept(value)
-        }
+    enum CodingKeys: String, CodingKey {
+        case uuid
+        case dataType
+        case category
+        case name
+        case minValue
+        case maxValue
+        case stepValue
+        case precision
+        case value
+        case defaultValue
     }
 
-    public var isNumeric: Bool = true
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
+        self.category = try container.decode(String.self, forKey: .category)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.minValue = try container.decode(Float.self, forKey: .minValue)
+        self.maxValue = try container.decode(Float.self, forKey: .maxValue)
+        self.stepValue = try container.decode(Float.self, forKey: .stepValue)
+        self.precision = try container.decode(Float.self, forKey: .precision)
+        self.value = try container.decode(Float.self, forKey: .value)
+        self.defaultValue = try container.decode(Float.self, forKey: .defaultValue)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(uuid, forKey: .uuid)
+        try container.encode(dataType, forKey: .dataType)
+        try container.encode(category, forKey: .category)
+        try container.encode(name, forKey: .name)
+        try container.encode(minValue, forKey: .minValue)
+        try container.encode(maxValue, forKey: .maxValue)
+        try container.encode(stepValue, forKey: .stepValue)
+        try container.encode(precision, forKey: .precision)
+        try container.encode(value, forKey: .value)
+        try container.encode(defaultValue, forKey: .defaultValue)
+    }
+
+    public func isNumeric() -> Bool {
+        return true
+    }
 
     public func revertToDefault() {
-        relay.accept(defaultValue)
+        value = defaultValue
     }
 }
 
-public class IntParameter: NSObject, Parameter {
+public class IntParameter: Parameter, Codable {
     public var uuid: String { return category + "-" + name }
     public var dataType: ParameterDataType = .int
+    public var persisted: Bool = true
     public var category: String = ""
     public var name: String = ""
-    public var relay: BehaviorRelay<Int> = BehaviorRelay<Int>(value: 0)
-    public var persisted: Bool = true
     public var minValue: Int = Int(0)
     public var maxValue: Int = Int(10)
     public var stepValue: Int = Int(1)
-    public var defaultValue: Int = Int(0)
+    public var value: Int = Int(0) {
+        didSet {
+            observers.forEach { (observer) in
+                observer.didUpdate(parameter: self)
+            }
+        }
+    }
+    public var defaultValue: Int = Int(0) {
+        didSet {
+            revertToDefault()
+        }
+    }
 
-    public override init() {
-        super.init()
+    public var observers = [ParameterObserver]()
+
+    public init() {
         revertToDefault()
     }
 
-    public var dictionaryRepresentation: [String: Any?] {
-        get {
-            var parameterDictionary: [String: Any?] = [:]
-            parameterDictionary["uuid"] = uuid
-            parameterDictionary["category"] = category
-            parameterDictionary["name"] = name
-            parameterDictionary["dataType"] = dataType.rawValue
-            parameterDictionary["value"] = relay.value
-            parameterDictionary["minValue"] = minValue
-            parameterDictionary["maxValue"] = maxValue
-            parameterDictionary["stepValue"] = stepValue
-            parameterDictionary["defaultValue"] = defaultValue
-            return parameterDictionary
-        }
-
-        set {
-            self.category = newValue["category"] as? String ?? ""
-            self.name = newValue["name"] as? String ?? ""
-            self.minValue = newValue["minValue"] as? Int ?? 0
-            self.maxValue = newValue["maxValue"] as? Int ?? 1
-            self.stepValue = newValue["stepValue"] as? Int ?? 1
-            let value = newValue["value"] as? Int ?? 0
-            self.defaultValue = newValue["defaultValue"] as? Int ?? value
-            relay.accept(value)
-        }
+    enum CodingKeys: String, CodingKey {
+        case uuid
+        case dataType
+        case category
+        case name
+        case minValue
+        case maxValue
+        case stepValue
+        case precision
+        case value
+        case defaultValue
     }
 
-    public var isNumeric: Bool = true
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
+        self.category = try container.decode(String.self, forKey: .category)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.minValue = try container.decode(Int.self, forKey: .minValue)
+        self.maxValue = try container.decode(Int.self, forKey: .maxValue)
+        self.stepValue = try container.decode(Int.self, forKey: .stepValue)
+        self.value = try container.decode(Int.self, forKey: .value)
+        self.defaultValue = try container.decode(Int.self, forKey: .defaultValue)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(uuid, forKey: .uuid)
+        try container.encode(dataType, forKey: .dataType)
+        try container.encode(category, forKey: .category)
+        try container.encode(name, forKey: .name)
+        try container.encode(minValue, forKey: .minValue)
+        try container.encode(maxValue, forKey: .maxValue)
+        try container.encode(stepValue, forKey: .stepValue)
+        try container.encode(value, forKey: .value)
+        try container.encode(defaultValue, forKey: .defaultValue)
+    }
+
+    public func isNumeric() -> Bool {
+        return true
+    }
 
     public func revertToDefault() {
-        relay.accept(defaultValue)
+        value = defaultValue
     }
 }
 
-public class StringParameter: NSObject, Parameter {
-    public var dictionaryRepresentation: [String: Any?] {
-        get {
-            var parameterDictionary: [String: Any?] = [:]
-            parameterDictionary["uuid"] = uuid
-            parameterDictionary["category"] = category
-            parameterDictionary["name"] = name
-            parameterDictionary["dataType"] = dataType.rawValue
-            parameterDictionary["value"] = relay.value
-            parameterDictionary["defaultValue"] = defaultValue
-            return parameterDictionary
-        }
-
-        set {
-            self.category = newValue["category"] as? String ?? ""
-            self.name = newValue["name"] as? String ?? ""
-            self.defaultValue = newValue["defaultValue"] as? String ?? ""
-            let value = newValue["value"] as? String ?? ""
-            relay.accept(value)
+public class PickerParameter: NSObject, Parameter, Codable {
+    public var uuid: String { return category + "-" + name }
+    public var dataType: ParameterDataType = .picker
+    public var persisted: Bool = true
+    public var category: String = ""
+    public var name: String = ""
+    public var pickerItems: [String]?
+    public var minValue: Int = Int(0)
+    public var maxValue: Int = Int(10)
+    public var stepValue: Int = Int(1)
+    public var value: Int = Int(0) {
+        didSet {
+            observers.forEach { (observer) in
+                observer.didUpdate(parameter: self)
+            }
         }
     }
 
+    public var defaultValue: Int = Int(0) {
+        didSet {
+            revertToDefault()
+        }
+    }
+
+    public var observers = [ParameterObserver]()
+
+    enum CodingKeys: String, CodingKey {
+        case uuid
+        case dataType
+        case category
+        case name
+        case pickerItems
+        case minValue
+        case maxValue
+        case stepValue
+        case value
+        case defaultValue
+    }
+
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
+        self.category = try container.decode(String.self, forKey: .category)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.pickerItems = try container.decodeIfPresent([String].self, forKey: .pickerItems)
+        self.minValue = try container.decode(Int.self, forKey: .minValue)
+        self.maxValue = try container.decode(Int.self, forKey: .maxValue)
+        self.stepValue = try container.decode(Int.self, forKey: .stepValue)
+        self.value = try container.decode(Int.self, forKey: .value)
+        self.defaultValue = try container.decode(Int.self, forKey: .defaultValue)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(uuid, forKey: .uuid)
+        try container.encode(dataType, forKey: .dataType)
+        try container.encode(category, forKey: .category)
+        try container.encode(name, forKey: .name)
+        try container.encode(minValue, forKey: .minValue)
+        try container.encode(maxValue, forKey: .maxValue)
+        try container.encode(stepValue, forKey: .stepValue)
+        try container.encode(value, forKey: .value)
+        try container.encode(defaultValue, forKey: .defaultValue)
+    }
+
+    public func isNumeric() -> Bool {
+        return false
+    }
+
+    public func revertToDefault() {
+        value = defaultValue
+    }
+}
+
+extension PickerParameter: UIPickerViewDataSource {
+
+    public func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+
+    public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickerItems?.count ?? 0
+    }
+}
+
+extension PickerParameter: UIPickerViewDelegate {
+
+    public func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        guard let pickerItems = pickerItems, component == 0, row < pickerItems.count else { return nil }
+        return pickerItems[row]
+    }
+
+    public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        value = row
+    }
+
+    public func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        let label = view as? UILabel ?? UILabel()
+
+        label.text = self.pickerView(pickerView, titleForRow: row, forComponent: component)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        label.textAlignment = .center
+
+        return label
+    }
+
+    public func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        return 36.0
+    }
+}
+
+public class StringParameter: Parameter, Codable {
     public var uuid: String { return category + "-" + name }
     public var dataType: ParameterDataType = .string
+    public var persisted: Bool = true
     public var category: String = ""
     public var name: String = ""
-    public var defaultValue: String = ""
-    public var relay: BehaviorRelay<String> = BehaviorRelay<String>(value: "")
-    public var persisted: Bool = true
+    public var value: String = "" {
+        didSet {
+            observers.forEach { (observer) in
+                observer.didUpdate(parameter: self)
+            }
+        }
+    }
 
-    public override init() {
-        super.init()
+    public var observers = [ParameterObserver]()
+
+    enum CodingKeys: String, CodingKey {
+        case uuid
+        case dataType
+        case category
+        case name
+        case value
+        case defaultValue
+    }
+
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
+        self.category = try container.decode(String.self, forKey: .category)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.value = try container.decode(String.self, forKey: .value)
+        self.defaultValue = try container.decode(String.self, forKey: .defaultValue)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(uuid, forKey: .uuid)
+        try container.encode(dataType, forKey: .dataType)
+        try container.encode(category, forKey: .category)
+        try container.encode(name, forKey: .name)
+        try container.encode(value, forKey: .value)
+        try container.encode(defaultValue, forKey: .defaultValue)
+    }
+
+    public var defaultValue: String = "" {
+        didSet {
+            revertToDefault()
+        }
+    }
+
+    public init() {
         revertToDefault()
     }
 
-    public var isNumeric: Bool = false
+    public func isNumeric() -> Bool {
+        return false
+    }
 
     public func revertToDefault() {
-        relay.accept(defaultValue)
+        value = defaultValue
     }
 }
 
-public class ColorParameter: NSObject, Parameter {
-    public var dictionaryRepresentation: [String: Any?] {
-        get {
-            var parameterDictionary: [String: Any?] = [:]
-            parameterDictionary["uuid"] = uuid
-            parameterDictionary["category"] = category
-            parameterDictionary["name"] = name
-            parameterDictionary["dataType"] = dataType.rawValue
-            parameterDictionary["value"] = relay.value.toHex(alpha: true)
-            parameterDictionary["defaultValue"] = defaultValue.toHex(alpha: true)
-            return parameterDictionary
+public class ColorParameter: Parameter, Codable {
+    public var uuid: String { return category + "-" + name }
+    public var dataType: ParameterDataType = .color
+    public var persisted: Bool = true
+    public var category: String = ""
+    public var name: String = ""
+    public var value: UIColor = UIColor.white {
+        didSet {
+            observers.forEach { (observer) in
+                observer.didUpdate(parameter: self)
+            }
         }
-
-        set {
-            self.category = newValue["category"] as? String ?? ""
-            self.name = newValue["name"] as? String ?? ""
-            self.defaultValue = UIColor.white
-            if let defaultStringValue = newValue["defaultValue"] as? String {
-                self.defaultValue = UIColor.init(hexString: defaultStringValue)
-            }
-
-            var value = UIColor.white
-            if let stringValue = newValue["value"] as? String {
-                value = UIColor.init(hexString: stringValue)
-            }
-            relay.accept(value)
+    }
+    public var defaultValue: UIColor = UIColor.white {
+        didSet {
+            revertToDefault()
         }
     }
 
-    public var uuid: String { return category + "-" + name }
-    public var dataType: ParameterDataType = .color
-    public var category: String = ""
-    public var name: String = ""
-    public var defaultValue: UIColor = UIColor.white
-    public var relay: BehaviorRelay<UIColor> = BehaviorRelay<UIColor>(value: UIColor.white)
-    public var persisted: Bool = true
+    public var observers = [ParameterObserver]()
 
-    public override init() {
-        super.init()
+    enum CodingKeys: String, CodingKey {
+        case uuid
+        case dataType
+        case category
+        case name
+        case value
+        case defaultValue
+    }
+
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
+        self.category = try container.decode(String.self, forKey: .category)
+        self.name = try container.decode(String.self, forKey: .name)
+        let stringValue = try container.decode(String.self, forKey: .value)
+        self.value = UIColor(hexString: stringValue)
+
+        let stringDefaultValue = try container.decode(String.self, forKey: .defaultValue)
+        self.defaultValue = UIColor(hexString: stringDefaultValue)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(uuid, forKey: .uuid)
+        try container.encode(dataType, forKey: .dataType)
+        try container.encode(category, forKey: .category)
+        try container.encode(name, forKey: .name)
+        if let stringValue = value.toHex {
+            try container.encode(stringValue, forKey: .value)
+        }
+
+        if let stringValue = defaultValue.toHex {
+            try container.encode(stringValue, forKey: .defaultValue)
+        }
+    }
+
+    public init() {
         revertToDefault()
     }
 
-    public var isNumeric: Bool = false
+    public func isNumeric() -> Bool {
+        return false
+    }
 
     public func revertToDefault() {
-        relay.accept(defaultValue)
+        value = defaultValue
+    }
+}
+
+public class SegmentedParameter: Parameter, Codable {
+    public var uuid: String { return category + "-" + name }
+    public var dataType: ParameterDataType = .segmented
+    public var persisted: Bool = true
+    public var category: String = ""
+    public var name: String = ""
+    public var titles: [String]!
+    public var value: Int = 0 {
+       didSet {
+            observers.forEach { (observer) in
+                observer.didUpdate(parameter: self)
+            }
+        }
+    }
+    public var defaultValue: Int = 0 {
+        didSet {
+            revertToDefault()
+        }
+    }
+
+    public var observers = [ParameterObserver]()
+
+    enum CodingKeys: String, CodingKey {
+        case uuid
+        case dataType
+        case category
+        case name
+        case titles
+        case value
+        case defaultValue
+    }
+
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
+        self.category = try container.decode(String.self, forKey: .category)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.value = try container.decode(Int.self, forKey: .value)
+        self.defaultValue = try container.decode(Int.self, forKey: .defaultValue)
+        self.titles = try container.decode([String].self, forKey: .titles)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(uuid, forKey: .uuid)
+        try container.encode(dataType, forKey: .dataType)
+        try container.encode(category, forKey: .category)
+        try container.encode(name, forKey: .name)
+        try container.encode(value, forKey: .value)
+        try container.encode(defaultValue, forKey: .defaultValue)
+        try container.encode(titles, forKey: .titles)
+    }
+
+
+    init(titles: [String]) {
+        self.titles = titles
+        revertToDefault()
+    }
+
+    public func isNumeric() -> Bool {
+        return false
+    }
+
+    public func revertToDefault() {
+        value = defaultValue
+    }
+}
+
+public class StaticTextParameter: Parameter, Codable {
+    public var uuid: String { return category + "-" + name }
+    public var dataType: ParameterDataType = .staticText
+    public var persisted: Bool = true
+    public var category: String = ""
+    public var name: String = ""
+    public var value: String = "" {
+        didSet {
+            observers.forEach { (observer) in
+                observer.didUpdate(parameter: self)
+            }
+        }
+    }
+
+    public var observers = [ParameterObserver]()
+
+    enum CodingKeys: String, CodingKey {
+        case uuid
+        case dataType
+        case category
+        case name
+        case value
+    }
+
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
+        self.category = try container.decode(String.self, forKey: .category)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.value = try container.decode(String.self, forKey: .value)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(uuid, forKey: .uuid)
+        try container.encode(dataType, forKey: .dataType)
+        try container.encode(category, forKey: .category)
+        try container.encode(name, forKey: .name)
+        try container.encode(value, forKey: .value)
+    }
+
+    public init() {
+        revertToDefault()
+    }
+
+    public func isNumeric() -> Bool {
+        return false
+    }
+
+    public func revertToDefault() {
     }
 }

@@ -9,123 +9,67 @@
 import UIKit
 import Parameters
 
-public struct CodableParameter: Codable {
-    public var uuid: String
-    public var dataType: Int
-    public var category: String
-    public var name: String
-    public var persisted: Bool
-    public var minValue: String
-    public var maxValue: String
-    public var stepValue: String
-    public var precision: String
-    public var defaultValue: String
-    public var value: String
+class CodableParameter: Codable {
 
-    public init(parameter: Parameter) {
-        uuid = parameter.uuid
-        dataType = parameter.dataType.rawValue
-        category = parameter.category
-        name = parameter.name
-        persisted = parameter.persisted
-
-        self.minValue = ""
-        maxValue = ""
-        stepValue = ""
-        precision = ""
-        defaultValue = ""
-        value = ""
-
-        switch parameter.dataType {
-        case .bool:
-            if let parameter = parameter as? BoolParameter {
-                defaultValue = String(parameter.defaultValue)
-                value = String(parameter.relay.value)
-            }
-        case .float:
-            if let parameter = parameter as? FloatParameter {
-                defaultValue = String(parameter.defaultValue)
-                value = String(parameter.relay.value)
-                minValue = String(parameter.minValue)
-                maxValue = String(parameter.maxValue)
-                precision = String(parameter.precision)
-                stepValue = String(parameter.stepValue)
-            }
-        case .int:
-            if let parameter = parameter as? IntParameter {
-                defaultValue = String(parameter.defaultValue)
-                value = String(parameter.relay.value)
-                minValue = String(parameter.minValue)
-                maxValue = String(parameter.maxValue)
-                stepValue = String(parameter.stepValue)
-            }
-        case .string:
-            if let parameter = parameter as? StringParameter {
-                defaultValue = parameter.defaultValue
-                value = parameter.relay.value
-            }
-        case .color:
-            if let parameter = parameter as? ColorParameter {
-                defaultValue = parameter.defaultValue.toHex(alpha: true)!
-                value = parameter.relay.value.toHex(alpha: true)!
-            }
-        }
-    }
-
-    enum CodingKeys: String, CodingKey {
-        case uuid
+    private enum CodingKeys: String, CodingKey {
         case dataType
-        case category
-        case name
-        case persisted
-        case minValue
-        case maxValue
-        case stepValue
-        case precision
-        case defaultValue
         case value
     }
 
-    public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        uuid = try values.decode(String.self, forKey: .uuid)
-        dataType = try values.decode(Int.self, forKey: .dataType)
-        category = try values.decode(String.self, forKey: .category)
-        name = try values.decode(String.self, forKey: .name)
-        persisted = try values.decode(Bool.self, forKey: .persisted)
+    public var dataType: Int {
+        return value.dataType.rawValue
+    }
+    
+    public let value: Parameter
 
-        minValue = ""
-        maxValue = ""
-        stepValue = ""
-        precision = ""
-        defaultValue = ""
-        value = ""
+    init(parameter: Parameter) {
+        self.value = parameter
+    }
 
-        if let dataTypeEnumValue = ParameterDataType(rawValue: dataType) {
-            switch dataTypeEnumValue {
-            case .bool:
-                defaultValue = try values.decode(String.self, forKey: .defaultValue)
-                value = try values.decode(String.self, forKey: .value)
-            case .float:
-                defaultValue = try values.decode(String.self, forKey: .defaultValue)
-                value = try values.decode(String.self, forKey: .value)
-                minValue = try values.decode(String.self, forKey: .minValue)
-                maxValue = try values.decode(String.self, forKey: .maxValue)
-                stepValue = try values.decode(String.self, forKey: .stepValue)
-                precision = try values.decode(String.self, forKey: .precision)
-            case .int:
-                defaultValue = try values.decode(String.self, forKey: .defaultValue)
-                value = try values.decode(String.self, forKey: .value)
-                minValue = try values.decode(String.self, forKey: .minValue)
-                maxValue = try values.decode(String.self, forKey: .maxValue)
-                stepValue = try values.decode(String.self, forKey: .stepValue)
-            case .string:
-                defaultValue = try values.decode(String.self, forKey: .defaultValue)
-                value = try values.decode(String.self, forKey: .value)
-            case .color:
-                defaultValue = try values.decode(String.self, forKey: .defaultValue)
-                value = try values.decode(String.self, forKey: .value)
-            }
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
+
+        switch dataType {
+        case .bool:
+            value = try container.decode(BoolParameter.self, forKey: .value)
+        case .int:
+            value = try container.decode(IntParameter.self, forKey: .value)
+        case .float:
+            value = try container.decode(FloatParameter.self, forKey: .value)
+        case .string:
+            value = try container.decode(StringParameter.self, forKey: .value)
+        case .color:
+            value = try container.decode(ColorParameter.self, forKey: .value)
+        case .segmented:
+            value = try container.decode(SegmentedParameter.self, forKey: .value)
+        case .staticText:
+            value = try container.decode(StaticTextParameter.self, forKey: .value)
+        case .picker:
+            value = try container.decode(PickerParameter.self, forKey: .value)
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(value.dataType, forKey: .dataType)
+        switch value.dataType {
+        case .bool:
+            try container.encode(value as! BoolParameter, forKey: .dataType)
+        case .int:
+            try container.encode(value as! IntParameter, forKey: .dataType)
+        case .float:
+            try container.encode(value as! FloatParameter, forKey: .dataType)
+        case .string:
+            try container.encode(value as! StringParameter, forKey: .dataType)
+        case .color:
+            try container.encode(value as! ColorParameter, forKey: .dataType)
+        case .segmented:
+            try container.encode(value as! SegmentedParameter, forKey: .dataType)
+        case .staticText:
+            try container.encode(value as! StaticTextParameter, forKey: .dataType)
+        case .picker:
+            try container.encode(value as! PickerParameter, forKey: .dataType)
         }
     }
 }

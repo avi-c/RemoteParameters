@@ -1,160 +1,289 @@
 //
 //  ParametersViewController.swift
-//  RemoteParameters
+//  Parameters
 //
-//  Created by Avi Cieplinski on 6/3/20.
-//  Copyright © 2020 Avi Cieplinski. All rights reserved.
+//  Created by Avi Cieplinski on 8/22/19.
+//  Copyright © 2019 Mapbox. All rights reserved.
 //
 
+import Foundation
 import UIKit
+import RxSwift
+import RxCocoa
 
-public class ParametersViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    public weak var parametersViewControllerDelegate: ParametersViewControllerDelegate?
-    var sortedGroups: [[String: [Parameter]]]?
-    var parametersGroups: [String: [Parameter]]?
-    public var parameters: [Parameter] = [Parameter]() {
+class ParametersViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    fileprivate let disposeBag = DisposeBag()
+
+    class var backgroundColor: UIColor {
+        if #available(iOS 13.0, *) {
+            return UIColor.systemBackground
+        } else {
+            return .white
+        }
+    }
+
+    class var tableViewSeparatorColor: UIColor {
+        if #available(iOS 13.0, *) {
+            return UIColor.separator
+        } else {
+            return UIColor.lightGray
+        }
+    }
+
+    class var textfieldBackgroundColor: UIColor {
+        if #available(iOS 13.0, *) {
+            return UIColor.systemBackground
+        } else {
+            return UIColor.white
+        }
+    }
+
+    class var textDefaultColor: UIColor {
+        return UIColor.darkText
+    }
+
+    static let pickerViewHeight = CGFloat(160)
+
+    public var showDebugParameters = true
+
+    public var parameters: [ParameterCategory]? {
         didSet {
-            parametersGroups = [String: [Parameter]]()
-            parameters.forEach { (parameter) in
-                if var entries = parametersGroups?[parameter.category] {
-                    entries.append(parameter)
-                    parametersGroups?[parameter.category] = entries
-                } else {
-                    parametersGroups?[parameter.category] = [parameter]
-                }
-            }
-
-            // get the sorted keys
-            let sortedKeys = parametersGroups?.keys.sorted()
-            var newValues: [[String: [Parameter]]] = [[String: [Parameter]]]()
-
-            sortedKeys?.forEach({ (key) in
-                let values = parametersGroups?[key]
-
-                // sort the values by name
-                let sortedValues = values?.sorted(by: { (p0, p1) -> Bool in
-                    p0.name > p1.name
-                })
-
-                var newCategory: [String: [Parameter]] = [String: [Parameter]]()
-                newCategory[key] = sortedValues
-                newValues.append(newCategory)
-            })
-            sortedGroups = newValues
             tableView.reloadData()
         }
     }
 
-    var selectedIndexPath: IndexPath?
+    // all the categories. Here so we can include the debug entries (if they are set to be visible)
+    private var allCategories: [ParameterCategory]? {
+        guard let parameters = parameters else { return nil }
 
-    public func numberOfSections(in tableView: UITableView) -> Int {
-        return sortedGroups?.count ?? 0
+        if !showDebugParameters {
+            let regularParameterCategoryList: [ParameterCategory]? = parameters.filter({ (category) -> Bool in
+                return category.isDebug == false
+            })
+            return regularParameterCategoryList
+        }
+        return parameters
     }
 
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let sortedGroups = sortedGroups else { return 0 }
-        return (sortedGroups[section].values.first?.count)!
+    private var selectedIndexPath: IndexPath?
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // Debug Options
+//        _ = Settings.shared.showDebugOptions.relay.subscribe(onNext: { [weak self] isOn in
+//            self?.showDebugParameters = isOn
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.0) {
+//                self?.tableView.reloadData()
+//            }
+//        }).disposed(by: disposeBag)
     }
 
-    public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard let sortedGroups = sortedGroups else { return nil }
-        return sortedGroups[section].keys.first
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return allCategories?.count ?? 0
     }
 
-    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 30.0
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let allCategories = allCategories else { return 0 }
+        let category = allCategories[section]
+        return category.disclosed ? category.entries.count : 1
     }
 
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell
 
-        let parameter = self.parameter(for: indexPath)
+        if let allCategories = allCategories {
+            let category = allCategories[indexPath.section]
 
-        if let floatPref = parameter as? FloatParameter {
-            if let floatParameterCellView = tableView.dequeueReusableCell(withIdentifier: "FloatParameterCell", for: indexPath) as? FloatParameterCellView {
-                floatParameterCellView.parameter = floatPref
-                cell = floatParameterCellView
+            if !category.disclosed {
+                var cell: UITableViewCell
+
+                cell = tableView.dequeueReusableCell(withIdentifier: "ParameterCategoryCell", for: indexPath)
+                cell.backgroundColor = ParametersViewController.backgroundColor
+                cell.textLabel?.text = category.name
+                cell.accessoryType = .disclosureIndicator
 
                 return cell
+            } else {
+                let parameter = category.entries[indexPath.row]
+                if let floatPref = parameter as? FloatParameter {
+                    if let floatParameterCellView = tableView.dequeueReusableCell(withIdentifier: "FloatParameterCell", for: indexPath) as? FloatParameterCellView {
+                        floatParameterCellView.parameter = floatPref
+                        floatParameterCellView.backgroundColor = ParametersViewController.backgroundColor
+                        cell = floatParameterCellView
+
+                        return cell
+                    }
+                } else if let boolPref = parameter as? BoolParameter, let boolParametersCellView = tableView.dequeueReusableCell(withIdentifier: "BoolParameterCell", for: indexPath) as? BoolParameterCellView {
+                    boolParametersCellView.parameter = boolPref
+                    boolParametersCellView.backgroundColor = ParametersViewController.backgroundColor
+                    cell = boolParametersCellView
+
+                    return cell
+                } else if let pickerPref = parameter as? PickerParameter, let pickerParameterCellView = tableView.dequeueReusableCell(withIdentifier: "PickerParameterCell", for: indexPath) as? PickerParameterCellView {
+                    pickerParameterCellView.parameter = pickerPref
+                    pickerParameterCellView.pickerView.dataSource = pickerPref
+                    pickerParameterCellView.pickerView.delegate = pickerPref
+                    pickerParameterCellView.pickerView.selectRow(pickerPref.value, inComponent: 0, animated: false)
+                    pickerParameterCellView.backgroundColor = ParametersViewController.backgroundColor
+                    cell = pickerParameterCellView
+
+                    return cell
+                } else if let intPref = parameter as? IntParameter, let intParametersCellView = tableView.dequeueReusableCell(withIdentifier: "IntParameterCell", for: indexPath) as? IntParameterCellView {
+                    intParametersCellView.parameter = intPref
+                    intParametersCellView.backgroundColor = ParametersViewController.backgroundColor
+                    cell = intParametersCellView
+
+                    return cell
+                } else if let stringPref = parameter as? StringParameter, let stringParametersCellView = tableView.dequeueReusableCell(withIdentifier: "StringParameterCell", for: indexPath) as? StringParameterCellView {
+                    stringParametersCellView.parameter = stringPref
+                    stringParametersCellView.backgroundColor = ParametersViewController.backgroundColor
+                    cell = stringParametersCellView
+
+                    return cell
+                } else if let segmentedPref = parameter as? SegmentedParameter, let segmentedParametersCellView = tableView.dequeueReusableCell(withIdentifier: "SegmentedParameterCell", for: indexPath) as? SegmentedParameterCellView {
+                    segmentedParametersCellView.parameter = segmentedPref
+                    cell = segmentedParametersCellView
+
+                    return cell
+                } else if let staticTextPref = parameter as? StaticTextParameter {
+                    let staticTextParameterCellView = tableView.dequeueReusableCell(withIdentifier: "StaticTextParameterCell") ?? UITableViewCell(style: .value1, reuseIdentifier: "StaticTextParameterCell")
+                    staticTextParameterCellView.textLabel?.text = staticTextPref.name
+                    staticTextParameterCellView.detailTextLabel?.text = staticTextPref.value
+                    cell = staticTextParameterCellView
+
+                    return cell
+                }
             }
-        } else if let boolPref = parameter as? BoolParameter, let boolParametersCellView = tableView.dequeueReusableCell(withIdentifier: "BoolParameterCell", for: indexPath) as? BoolParameterCellView {
-            boolParametersCellView.parameter = boolPref
-            cell = boolParametersCellView
-
-            return cell
-        } else if let intPref = parameter as? IntParameter, let intParametersCellView = tableView.dequeueReusableCell(withIdentifier: "IntParameterCell", for: indexPath) as? IntParameterCellView {
-            intParametersCellView.parameter = intPref
-            cell = intParametersCellView
-
-            return cell
-        } else if let stringPref = parameter as? StringParameter, let stringParametersCellView = tableView.dequeueReusableCell(withIdentifier: "StringParameterCell", for: indexPath) as? StringParameterCellView {
-            stringParametersCellView.parameter = stringPref
-            cell = stringParametersCellView
-
-            return cell
-        } else if let colorPref = parameter as? ColorParameter, let colorParametersCellView = tableView.dequeueReusableCell(withIdentifier: "ColorParameterCell", for: indexPath) as? ColorParameterCellView {
-            colorParametersCellView.parameter = colorPref
-            cell = colorParametersCellView
-
-            return cell
         }
 
         cell = tableView.dequeueReusableCell(withIdentifier: "ParameterCell", for: indexPath)
+        cell.backgroundColor = ParametersViewController.backgroundColor
         cell.textLabel?.text = "Empty"
         return cell
     }
 
-    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if let parameter = self.parameter(for: indexPath) {
-            if parameter.isNumeric {
-                return 112
-            } else if parameter.dataType == .string || parameter.dataType == .color {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+
+        guard let allCategories = allCategories else { return 48 }
+
+        let category = allCategories[indexPath.section]
+
+        if category.disclosed {
+            let parameter = category.entries[indexPath.row]
+
+            if parameter.dataType == .picker {
+                return ParametersViewController.pickerViewHeight
+            } else if parameter.isNumeric() {
+                return 120
+            } else if parameter.dataType == .string {
                 return 80
+            } else if parameter.dataType == .segmented {
+                return 100
             }
         }
 
-        return 44
+        return 48
     }
 
-    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor.groupTableViewBackground
+
+        if section == 0 {
+            let bottomSeparatorView = UIView()
+            bottomSeparatorView.backgroundColor = ParametersViewController.tableViewSeparatorColor
+            backgroundView.addSubview(bottomSeparatorView)
+            bottomSeparatorView.translatesAutoresizingMaskIntoConstraints = false
+            bottomSeparatorView.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor).isActive = true
+            bottomSeparatorView.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor).isActive = true
+            bottomSeparatorView.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor).isActive = true
+            bottomSeparatorView.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
+        } else {
+            let topSeparatorView = UIView()
+            topSeparatorView.backgroundColor = ParametersViewController.tableViewSeparatorColor
+            backgroundView.addSubview(topSeparatorView)
+            topSeparatorView.translatesAutoresizingMaskIntoConstraints = false
+            topSeparatorView.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor).isActive = true
+            topSeparatorView.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor).isActive = true
+            topSeparatorView.topAnchor.constraint(equalTo: backgroundView.topAnchor).isActive = true
+            topSeparatorView.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
+        }
+        return backgroundView
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard section > 0 else { return 0 }
+        return 36.0
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedIndexPath = indexPath
+
+        tableView.deselectRow(at: indexPath, animated: true)
+
+        // push on a VC for this parameter set
+        if let category = parameterCategory(for: indexPath), category.disclosed == false {
+            let parametersViewController = ParametersViewController()
+            var singleCategory = category
+            singleCategory.disclosed = true
+            parametersViewController.title = singleCategory.name
+            parametersViewController.parameters = [singleCategory]
+            self.navigationController?.pushViewController(parametersViewController, animated: true)
+        }
     }
 
     let tableView: UITableView = UITableView()
+    let tableViewController: UIViewController = UIViewController()
 
-    override public func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.addSubview(tableView)
+        tableViewController.view.addSubview(tableView)
+        self.edgesForExtendedLayout = []
+        self.view.addSubview(tableViewController.view)
 
-        self.view.backgroundColor = UIColor.lightGray
-
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(self.doneWasTapped))
-
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(title: "Revert", style: .plain, target: self, action: #selector(self.revertWasTapped))
-
-        self.navigationItem.title = "Parameters"
+        self.view.backgroundColor = UIColor.groupTableViewBackground
+        tableView.backgroundColor = UIColor.groupTableViewBackground
 
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
-        tableView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
-        tableView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        tableView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        tableView.widthAnchor.constraint(equalTo: tableViewController.view.widthAnchor).isActive = true
+        tableView.heightAnchor.constraint(equalTo: tableViewController.view.heightAnchor).isActive = true
+        tableView.centerXAnchor.constraint(equalTo: tableViewController.view.centerXAnchor).isActive = true
+        tableView.centerYAnchor.constraint(equalTo: tableViewController.view.centerYAnchor).isActive = true
 
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.layer.cornerRadius = 10
         tableView.clipsToBounds = true
+        tableView.allowsSelection = true
+
+        let tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 24))
+        tableFooterView.backgroundColor = .groupTableViewBackground
+        let topSeparatorView = UIView()
+        topSeparatorView.backgroundColor = ParametersViewController.tableViewSeparatorColor
+        tableFooterView.addSubview(topSeparatorView)
+        topSeparatorView.translatesAutoresizingMaskIntoConstraints = false
+        topSeparatorView.leadingAnchor.constraint(equalTo: tableFooterView.leadingAnchor).isActive = true
+        topSeparatorView.trailingAnchor.constraint(equalTo: tableFooterView.trailingAnchor).isActive = true
+        topSeparatorView.topAnchor.constraint(equalTo: tableFooterView.topAnchor).isActive = true
+        topSeparatorView.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
+
+        tableView.tableFooterView = tableFooterView
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ParameterCell")
         tableView.register(FloatParameterCellView.self, forCellReuseIdentifier: "FloatParameterCell")
         tableView.register(BoolParameterCellView.self, forCellReuseIdentifier: "BoolParameterCell")
         tableView.register(IntParameterCellView.self, forCellReuseIdentifier: "IntParameterCell")
         tableView.register(StringParameterCellView.self, forCellReuseIdentifier: "StringParameterCell")
-        tableView.register(ColorParameterCellView.self, forCellReuseIdentifier: "ColorParameterCell")
+        tableView.register(SegmentedParameterCellView.self, forCellReuseIdentifier: "SegmentedParameterCell")
+        tableView.register(PickerParameterCellView.self, forCellReuseIdentifier: "PickerParameterCell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ParameterCategoryCell")
 
         startObservingKeyboardEvents()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        //Save The Parameters to disk (call delegate method) Settings.shared.saveParameters()
     }
 
     private func startObservingKeyboardEvents() {
@@ -191,44 +320,18 @@ public class ParametersViewController: UIViewController, UITableViewDataSource, 
             }, completion: nil)
     }
 
-    @objc private func doneWasTapped() {
-        if let presentingViewController = self.presentingViewController {
-            stopObservingKeyboardEvents()
-            presentingViewController.dismiss(animated: true) {
-                if let delegate = self.parametersViewControllerDelegate {
-                    delegate.viewControllerWasDismissed(self)
-                }
-            }
-        }
+    private func parameterCategory(for indexPath: IndexPath) -> ParameterCategory? {
+        guard let allCategories = allCategories else { return nil }
+
+        return allCategories[indexPath.section]
     }
-
-    @objc private func revertWasTapped() {
-        parameters.forEach { (parameter) in
-            parameter.revertToDefault()
-        }
-        self.tableView.reloadData()
-    }
-
-    private func parameter(for indexPath: IndexPath) -> Parameter? {
-        guard let sortedGroups = sortedGroups else { return nil }
-
-        let valuesArray = Array(sortedGroups[indexPath.section].values)
-        if let parametersArray = valuesArray.first {
-            return parametersArray[indexPath.row]
-        }
-        return nil
-    }
-}
-
-public protocol ParametersViewControllerDelegate : class {
-    func viewControllerWasDismissed(_ viewController: ParametersViewController)
 }
 
 class ParameterCellView: UITableViewCell, UITextFieldDelegate {
     let horizontalInset = CGFloat(12)
     let verticalInset = CGFloat(8)
     let horizontalSpacing = CGFloat(12)
-    let verticalSpacing = CGFloat(8)
+    let verticalSpacing = CGFloat(10)
 
     var parameter: Parameter? {
         didSet {
@@ -242,10 +345,13 @@ class ParameterCellView: UITableViewCell, UITextFieldDelegate {
     let slider: UISlider = UISlider()
     let stepper: UIStepper = UIStepper()
     let revertButton: UIButton = UIButton()
+    let segmentedControl: UISegmentedControl = UISegmentedControl()
+    let pickerView: UIPickerView = UIPickerView()
 
     init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, parameter: Parameter) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.parameter = parameter
+        self.backgroundColor = .groupTableViewBackground
         commonInit()
     }
 
@@ -266,17 +372,25 @@ class ParameterCellView: UITableViewCell, UITextFieldDelegate {
         contentView.addSubview(slider)
         contentView.addSubview(stepper)
         contentView.addSubview(revertButton)
+        contentView.addSubview(segmentedControl)
+        contentView.addSubview(pickerView)
 
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.systemFont(ofSize: 17)
         textfield.font = UIFont.systemFont(ofSize: 14)
         textfield.delegate = self
         textfield.returnKeyType = .done
-        textfield.backgroundColor = .white
-        textfield.textColor = .black
+        textfield.backgroundColor = ParametersViewController.textfieldBackgroundColor
+        textfield.textColor = ParametersViewController.textDefaultColor
         textfield.isUserInteractionEnabled = true
         textfield.borderStyle = .roundedRect
+        textfield.clearButtonMode = .whileEditing
 
-        revertButton.setAttributedTitle(NSAttributedString(string: "Revert", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: UIColor.black]), for: .normal)
+        pickerView.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.5).cgColor
+        pickerView.layer.borderWidth = 0.5
+        pickerView.layer.cornerRadius = 6
+        pickerView.backgroundColor = ParametersViewController.textfieldBackgroundColor
+
+        revertButton.setAttributedTitle(NSAttributedString(string: "Revert", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: ParametersViewController.textDefaultColor]), for: .normal)
         revertButton.sizeToFit()
         addDoneButtonOnKeyboard()
     }
@@ -302,28 +416,30 @@ class ParameterCellView: UITableViewCell, UITextFieldDelegate {
             switch parameter.dataType {
             case .bool:
                 if let parameter = parameter as? BoolParameter {
-                    textfield.text = "\(parameter.relay.value)"
+                    textfield.text = "\(parameter.value)"
                 }
                 labelFrame.size.height = contentView.bounds.size.height
                 labelFrame.origin.y = 0
             case .float:
                 if let parameter = parameter as? FloatParameter {
-                    textfield.text = "\(parameter.relay.value)"
+                    textfield.text = "\(parameter.value)"
                 }
             case .int:
                 if let parameter = parameter as? IntParameter {
-                    textfield.text = "\(parameter.relay.value)"
+                    textfield.text = "\(parameter.value)"
                     slider.maximumValue = Float(parameter.maxValue)
                     slider.minimumValue = Float(parameter.minValue)
                 }
             case .string:
                 if let parameter = parameter as? StringParameter {
-                    textfield.text = parameter.relay.value
+                    textfield.text = parameter.value
                 }
-            case .color:
-                if let parameter = parameter as? ColorParameter {
-                    textfield.text = parameter.relay.value.toHex(alpha: true)
+            case .segmented:
+                if let parameter = parameter as? SegmentedParameter {
+                    segmentedControl.selectedSegmentIndex = parameter.value
                 }
+            default:
+                textfield.text = ""
             }
 
             label.frame = labelFrame
@@ -356,6 +472,20 @@ class ParameterCellView: UITableViewCell, UITextFieldDelegate {
         switchFrame.origin.x = contentView.bounds.width - horizontalInset - switchFrame.size.width
         switchFrame.origin.y = verticalInset
         switchControl.frame = switchFrame
+
+        var segmentedControlFrame = segmentedControl.frame
+        segmentedControlFrame.origin.x = horizontalInset
+        segmentedControlFrame.origin.y = label.frame.origin.y + label.frame.height + verticalSpacing
+        segmentedControlFrame.size.width = contentView.bounds.width - 2 * horizontalInset
+        segmentedControlFrame.size.height = 46
+        segmentedControl.frame = segmentedControlFrame
+
+        var pickerViewControlFrame = pickerView.frame
+        pickerViewControlFrame.origin.x = horizontalInset
+        pickerViewControlFrame.origin.y = verticalInset + labelFrame.size.height + verticalSpacing
+        pickerViewControlFrame.size.width = contentView.bounds.width - 2 * horizontalInset - revertButton.bounds.size.width - horizontalSpacing
+        pickerViewControlFrame.size.height = ParametersViewController.pickerViewHeight - (verticalInset + labelFrame.size.height + verticalSpacing + verticalInset + verticalSpacing)
+        pickerView.frame = pickerViewControlFrame
     }
 
     func rebuildControls() {
@@ -363,6 +493,7 @@ class ParameterCellView: UITableViewCell, UITextFieldDelegate {
         slider.removeTarget(self, action: #selector(self.sliderValueChanged(_:)), for: .valueChanged)
         stepper.removeTarget(self, action: #selector(self.stepperValueChanged(_:)), for: .valueChanged)
         revertButton.removeTarget(self, action: #selector(self.revertButtonTapped(_:)), for: .touchUpInside)
+        segmentedControl.removeTarget(self, action: #selector(self.segmentedControlChanged(_:)), for: .valueChanged)
 
         guard let parameter = parameter else { return }
 
@@ -370,8 +501,10 @@ class ParameterCellView: UITableViewCell, UITextFieldDelegate {
         slider.isHidden = true
         stepper.isHidden = true
         revertButton.isHidden = true
+        segmentedControl.isHidden = true
+        pickerView.isHidden = true
 
-        if parameter.isNumeric {
+        if parameter.isNumeric() {
             switchControl.isHidden = true
             slider.isHidden = false
             stepper.isHidden = false
@@ -381,21 +514,21 @@ class ParameterCellView: UITableViewCell, UITextFieldDelegate {
             if let parameter = parameter as? FloatParameter {
                 slider.maximumValue = parameter.maxValue
                 slider.minimumValue = parameter.minValue
-                slider.value = parameter.relay.value
+                slider.value = parameter.value
 
                 stepper.minimumValue = Double(parameter.minValue)
                 stepper.maximumValue = Double(parameter.maxValue)
                 stepper.stepValue = Double(parameter.stepValue)
-                stepper.value = Double(parameter.relay.value)
+                stepper.value = Double(parameter.value)
             } else if let parameter = parameter as? IntParameter {
                 slider.maximumValue = Float(parameter.maxValue)
                 slider.minimumValue = Float(parameter.minValue)
-                slider.value = Float(parameter.relay.value)
+                slider.value = Float(parameter.value)
 
                 stepper.minimumValue = Double(parameter.minValue)
                 stepper.maximumValue = Double(parameter.maxValue)
                 stepper.stepValue = Double(parameter.stepValue)
-                stepper.value = Double(parameter.relay.value)
+                stepper.value = Double(parameter.value)
             }
             slider.addTarget(self, action: #selector(self.sliderValueChanged(_:)), for: .valueChanged)
             stepper.addTarget(self, action: #selector(self.stepperValueChanged(_:)), for: .valueChanged)
@@ -407,7 +540,7 @@ class ParameterCellView: UITableViewCell, UITextFieldDelegate {
                 stepper.isHidden = true
                 textfield.isHidden = true
 
-                switchControl.isOn = parameter.relay.value
+                switchControl.isOn = parameter.value
                 switchControl.addTarget(self, action: #selector(self.switchValueChanged(_:)), for: .valueChanged)
                 textfield.keyboardType = .numbersAndPunctuation
             } else if let parameter = parameter as? StringParameter {
@@ -417,17 +550,27 @@ class ParameterCellView: UITableViewCell, UITextFieldDelegate {
                 stepper.isHidden = true
                 revertButton.isHidden = false
                 textfield.isHidden = false
-                textfield.text = parameter.relay.value
-            } else if let parameter = parameter as? ColorParameter {
+                textfield.text = parameter.value
+            } else if let parameter = parameter as? SegmentedParameter {
                 switchControl.isHidden = true
                 slider.isHidden = true
                 stepper.isHidden = true
-                textfield.isHidden = false
-                revertButton.isHidden = false
-
-                textfield.text = parameter.relay.value.toHex(alpha: true)
-
+                textfield.isHidden = true
+                segmentedControl.isHidden = false
+                segmentedControl.removeAllSegments()
+                segmentedControl.addTarget(self, action: #selector(self.segmentedControlChanged(_:)), for: .valueChanged)
+                parameter.titles.forEach { (title) in
+                    segmentedControl.insertSegment(withTitle: title, at: segmentedControl.numberOfSegments, animated: false)
+                }
+            } else if parameter is PickerParameter {
                 textfield.keyboardType = .default
+                switchControl.isHidden = true
+                slider.isHidden = true
+                stepper.isHidden = true
+                revertButton.isHidden = false
+                textfield.isHidden = true
+                textfield.text = ""
+                pickerView.isHidden = false
             }
         }
         revertButton.addTarget(self, action: #selector(self.revertButtonTapped(_:)), for: .touchUpInside)
@@ -436,12 +579,13 @@ class ParameterCellView: UITableViewCell, UITextFieldDelegate {
     private func reset() {
         parameter = nil
         label.text = nil
+        backgroundColor = backgroundColor
     }
 
     // MARK: Events
     @objc private func switchValueChanged(_ sender: UISwitch) {
         if let parameter = parameter as? BoolParameter {
-            parameter.relay.accept(sender.isOn)
+            parameter.value = sender.isOn
         }
     }
 
@@ -450,12 +594,12 @@ class ParameterCellView: UITableViewCell, UITextFieldDelegate {
             let roundingPrecision = 1.0 / parameter.precision
             let floatValue = Float(sender.value)
             let roundedFloat = round(roundingPrecision*floatValue)/roundingPrecision
-            parameter.relay.accept(roundedFloat)
+            parameter.value = roundedFloat
             stepper.value = Double(roundedFloat)
             textfield.text = "\(roundedFloat)"
         } else if let parameter = parameter as? IntParameter {
             let roundedValue = Int(slider.value)
-            parameter.relay.accept(roundedValue)
+            parameter.value = roundedValue
             stepper.value = Double(roundedValue)
             textfield.text = "\(roundedValue)"
         }
@@ -466,15 +610,21 @@ class ParameterCellView: UITableViewCell, UITextFieldDelegate {
             let roundingPrecision = 1.0 / parameter.precision
             let floatValue = Float(sender.value)
             let roundedFloat = round(roundingPrecision*floatValue)/roundingPrecision
-            parameter.relay.accept(roundedFloat)
+            parameter.value = roundedFloat
             slider.value = roundedFloat
             textfield.text = "\(roundedFloat)"
         } else if let parameter = parameter as? IntParameter {
             let roundedValue = Int(sender.value)
             let roundedFloat = Float(roundedValue)
-            parameter.relay.accept(roundedValue)
+            parameter.value = roundedValue
             slider.value = roundedFloat
             textfield.text = "\(roundedValue)"
+        }
+    }
+
+    @objc private func segmentedControlChanged(_ sender: UISegmentedControl) {
+        if let parameter = parameter as? SegmentedParameter {
+            parameter.value = segmentedControl.selectedSegmentIndex
         }
     }
 
@@ -490,9 +640,9 @@ class ParameterCellView: UITableViewCell, UITextFieldDelegate {
             textfield.text = "\(parameter.defaultValue)"
             stepper.value = Double(parameter.defaultValue)
         } else if let parameter = parameter as? StringParameter {
-            textfield.text = parameter.relay.value
-        } else if let parameter = parameter as? ColorParameter {
-            textfield.text = parameter.relay.value.toHex(alpha: true)
+            textfield.text = parameter.value
+        } else if let parameter = parameter as? PickerParameter {
+            pickerView.selectRow(parameter.defaultValue, inComponent: 0, animated: true)
         }
     }
 
@@ -501,24 +651,21 @@ class ParameterCellView: UITableViewCell, UITextFieldDelegate {
             if let floatValue = Float(textfield.text!) {
                 let roundingPrecision = 1.0 / parameter.precision
                 let roundedFloat = round(roundingPrecision*floatValue)/roundingPrecision
-                parameter.relay.accept(roundedFloat)
+                parameter.value = roundedFloat
                 slider.value = floatValue
-                textfield.text = "\(parameter.relay.value)"
+                textfield.text = "\(parameter.value)"
                 stepper.value = Double(floatValue)
             }
         } else if let parameter = parameter as? IntParameter {
             if let intValue = Int(textfield.text!) {
-                parameter.relay.accept(intValue)
+                parameter.value = intValue
                 slider.value = Float(intValue)
-                textfield.text = "\(parameter.relay.value)"
+                textfield.text = "\(parameter.value)"
                 stepper.value = Double(intValue)
             }
         } else if let parameter = parameter as? StringParameter, let text = textfield.text {
-            parameter.relay.accept(text)
-            textfield.text = parameter.relay.value
-        } else if let parameter = parameter as? ColorParameter, let text = textfield.text {
-            let color = UIColor.init(hexString: text)
-            parameter.relay.accept(color)
+            parameter.value = text
+            textfield.text = parameter.value
         }
     }
 
@@ -546,7 +693,7 @@ class ParameterCellView: UITableViewCell, UITextFieldDelegate {
     // MARK: UITextFieldDelegate Methods
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
-//        print("textFieldDidBeginEditing: \(String(describing: textField.text))")
+        //        print("textFieldDidBeginEditing: \(String(describing: textField.text))")
     }
 
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
@@ -577,7 +724,28 @@ class IntParameterCellView: ParameterCellView {
 }
 
 class StringParameterCellView: ParameterCellView {
+    override func commonInit() {
+        super.commonInit()
+        label.font = UIFont.systemFont(ofSize: 15)
+    }
 }
 
-class ColorParameterCellView: ParameterCellView {
+class SegmentedParameterCellView: ParameterCellView {
+    override func commonInit() {
+        super.commonInit()
+        label.font = UIFont.systemFont(ofSize: 15)
+    }
+}
+
+class StaticTextParameterCellView: UITableViewCell {
+
+    let horizontalInset = CGFloat(12)
+    let verticalInset = CGFloat(8)
+    let horizontalSpacing = CGFloat(12)
+    let verticalSpacing = CGFloat(10)
+    var parameter: StaticTextParameter?
+
+}
+
+class PickerParameterCellView: ParameterCellView {
 }
