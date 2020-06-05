@@ -41,7 +41,7 @@ public struct ParameterCategory: Codable {
         try container.encode(disclosed, forKey: .disclosed)
     }
 
-    init(name: String, entries: [Parameter], isDebug: Bool = false, disclosed: Bool = false) {
+    public init(name: String, entries: [Parameter], isDebug: Bool = false, disclosed: Bool = false) {
         self.name = name
         self.entries = entries
         self.isDebug = isDebug

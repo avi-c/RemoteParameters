@@ -60,7 +60,7 @@ public class RemoteParameters: NSObject, RemoteParameterSessionDelegate {
         do {
             let decodedParameters = try JSONDecoder().decode([ParameterCategory].self, from: data)
             DispatchQueue.main.async {
-                self.dataSource?.remoteParametersDidUpdate(self, parameters: decodedParameters)
+                self.dataSource?.remoteParametersDidUpdate(self, parameterCategories: decodedParameters)
             }
         } catch {
             print("deserialization error: \(error)")
@@ -70,5 +70,5 @@ public class RemoteParameters: NSObject, RemoteParameterSessionDelegate {
 
 public protocol RemoteParametersDataSource: class {
     func remoteParameterList(_ remoteParameters: RemoteParameters) -> [ParameterCategory]
-    func remoteParametersDidUpdate(_ remoteParameters: RemoteParameters, parameters: [ParameterCategory])
+    func remoteParametersDidUpdate(_ remoteParameters: RemoteParameters, parameterCategories: [ParameterCategory])
 }
