@@ -8,8 +8,6 @@
 
 import Foundation
 import UIKit
-import RxSwift
-import RxCocoa
 
 // TODO
 // 1. Remote Parameters

@@ -8,12 +8,8 @@
 
 import Foundation
 import UIKit
-import RxSwift
-import RxCocoa
 
 class ParametersViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    fileprivate let disposeBag = DisposeBag()
-
     class var backgroundColor: UIColor {
         if #available(iOS 13.0, *) {
             return UIColor.systemBackground
