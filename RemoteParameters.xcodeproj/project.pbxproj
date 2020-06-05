@@ -8,14 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		F43758C3223070D7006307D0 /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43758C2223070D7006307D0 /* MultipeerConnectivity.framework */; };
-		F43758C62230712F006307D0 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43758C42230712F006307D0 /* RxCocoa.framework */; };
-		F43758C72230712F006307D0 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43758C52230712F006307D0 /* RxSwift.framework */; };
 		F492AAEA2488BBC60027C5D8 /* Parameters.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F495C2D02488A75300A8FE78 /* Parameters.framework */; };
 		F495C2D42488A75300A8FE78 /* Parameters.h in Headers */ = {isa = PBXBuildFile; fileRef = F495C2D22488A75300A8FE78 /* Parameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F495C2D82488A76300A8FE78 /* Parameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B3223070C3006307D0 /* Parameter.swift */; };
 		F495C2DB2488A80100A8FE78 /* ParametersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F495C2D92488A7DA00A8FE78 /* ParametersViewController.swift */; };
-		F495C2DC2488A81400A8FE78 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43758C42230712F006307D0 /* RxCocoa.framework */; };
-		F495C2DD2488A81700A8FE78 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43758C52230712F006307D0 /* RxSwift.framework */; };
 		F49D16832488B38100B14B67 /* ParameterServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B8223070C4006307D0 /* ParameterServer.swift */; };
 		F49D16842488B38B00B14B67 /* RemoteParameterSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B7223070C4006307D0 /* RemoteParameterSession.swift */; };
 		F49D16852488B38F00B14B67 /* RemoteParameterServerBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43758B5223070C4006307D0 /* RemoteParameterServerBrowser.swift */; };
@@ -48,8 +44,6 @@
 		F43758B8223070C4006307D0 /* ParameterServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParameterServer.swift; sourceTree = "<group>"; };
 		F43758B9223070C4006307D0 /* RemoteParameterReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteParameterReceiver.swift; sourceTree = "<group>"; };
 		F43758C2223070D7006307D0 /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
-		F43758C42230712F006307D0 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
-		F43758C52230712F006307D0 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		F43758C9223071C2006307D0 /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		F43758CB22307CC3006307D0 /* RemoteParameterAdvertiser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteParameterAdvertiser.swift; sourceTree = "<group>"; };
 		F495C2D02488A75300A8FE78 /* Parameters.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Parameters.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -64,9 +58,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F492AAEA2488BBC60027C5D8 /* Parameters.framework in Frameworks */,
-				F43758C62230712F006307D0 /* RxCocoa.framework in Frameworks */,
 				F43758C3223070D7006307D0 /* MultipeerConnectivity.framework in Frameworks */,
-				F43758C72230712F006307D0 /* RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,8 +66,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F495C2DD2488A81700A8FE78 /* RxSwift.framework in Frameworks */,
-				F495C2DC2488A81400A8FE78 /* RxCocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,8 +111,6 @@
 		F43758C1223070D7006307D0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F43758C42230712F006307D0 /* RxCocoa.framework */,
-				F43758C52230712F006307D0 /* RxSwift.framework */,
 				F43758C2223070D7006307D0 /* MultipeerConnectivity.framework */,
 			);
 			name = Frameworks;
