@@ -9,6 +9,13 @@
 import Foundation
 import UIKit
 
+public protocol ParametersViewControllerDelegate: class {
+    func willAppear(parametersViewController: ParametersViewController)
+    func didAppear(parametersViewController: ParametersViewController)
+    func willDisappear(parametersViewController: ParametersViewController)
+    func didDisappear(parametersViewController: ParametersViewController)
+}
+
 public class ParametersViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     class var backgroundColor: UIColor {
         if #available(iOS 13.0, *) {
@@ -38,6 +45,8 @@ public class ParametersViewController: UIViewController, UITableViewDataSource, 
         return UIColor.darkText
     }
 
+    weak var parametersViewControllerDelegate: ParametersViewControllerDelegate?
+
     static let pickerViewHeight = CGFloat(160)
 
     public var showDebugParameters = true
@@ -65,14 +74,22 @@ public class ParametersViewController: UIViewController, UITableViewDataSource, 
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        parametersViewControllerDelegate?.willAppear(parametersViewController: self)
+    }
 
-        // Debug Options
-//        _ = Settings.shared.showDebugOptions.relay.subscribe(onNext: { [weak self] isOn in
-//            self?.showDebugParameters = isOn
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.0) {
-//                self?.tableView.reloadData()
-//            }
-//        }).disposed(by: disposeBag)
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        parametersViewControllerDelegate?.willDisappear(parametersViewController: self)
+    }
+
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        parametersViewControllerDelegate?.didDisappear(parametersViewController: self)
+    }
+
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        parametersViewControllerDelegate?.didAppear(parametersViewController: self)
     }
 
     public func numberOfSections(in tableView: UITableView) -> Int {
@@ -276,10 +293,6 @@ public class ParametersViewController: UIViewController, UITableViewDataSource, 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ParameterCategoryCell")
 
         startObservingKeyboardEvents()
-    }
-
-    public override func viewDidDisappear(_ animated: Bool) {
-        //Save The Parameters to disk (call delegate method) Settings.shared.saveParameters()
     }
 
     private func startObservingKeyboardEvents() {
