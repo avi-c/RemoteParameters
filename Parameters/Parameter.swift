@@ -10,10 +10,10 @@ import Foundation
 import UIKit
 
 public struct ParameterCategory: Codable {
-    let name: String
-    let entries: [Parameter]
-    let isDebug: Bool
-    var disclosed: Bool
+    public let name: String
+    public let entries: [Parameter]
+    public let isDebug: Bool
+    public var disclosed: Bool
 
     enum CodingKeys: String, CodingKey {
         case name
