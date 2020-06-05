@@ -27,9 +27,9 @@ public class CodableParameter: Codable {
 
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
+        let decodedDataType = try container.decode(Int.self, forKey: .dataType)
 
-        switch dataType {
+        switch ParameterDataType(rawValue: decodedDataType) {
         case .bool:
             value = try container.decode(BoolParameter.self, forKey: .value)
         case .int:
@@ -46,29 +46,31 @@ public class CodableParameter: Codable {
             value = try container.decode(StaticTextParameter.self, forKey: .value)
         case .picker:
             value = try container.decode(PickerParameter.self, forKey: .value)
+        case .none:
+            value = BoolParameter()
         }
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(value.dataType, forKey: .dataType)
+        try container.encode(dataType, forKey: .dataType)
         switch value.dataType {
         case .bool:
-            try container.encode(value as! BoolParameter, forKey: .dataType)
+            try container.encode(value as! BoolParameter, forKey: .value)
         case .int:
-            try container.encode(value as! IntParameter, forKey: .dataType)
+            try container.encode(value as! IntParameter, forKey: .value)
         case .float:
-            try container.encode(value as! FloatParameter, forKey: .dataType)
+            try container.encode(value as! FloatParameter, forKey: .value)
         case .string:
-            try container.encode(value as! StringParameter, forKey: .dataType)
+            try container.encode(value as! StringParameter, forKey: .value)
         case .color:
-            try container.encode(value as! ColorParameter, forKey: .dataType)
+            try container.encode(value as! ColorParameter, forKey: .value)
         case .segmented:
-            try container.encode(value as! SegmentedParameter, forKey: .dataType)
+            try container.encode(value as! SegmentedParameter, forKey: .value)
         case .staticText:
-            try container.encode(value as! StaticTextParameter, forKey: .dataType)
+            try container.encode(value as! StaticTextParameter, forKey: .value)
         case .picker:
-            try container.encode(value as! PickerParameter, forKey: .dataType)
+            try container.encode(value as! PickerParameter, forKey: .value)
         }
     }
 }

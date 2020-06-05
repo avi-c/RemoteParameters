@@ -122,7 +122,7 @@ public class BoolParameter: Parameter, Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uuid, forKey: .uuid)
-        try container.encode(dataType, forKey: .dataType)
+        try container.encode(dataType.rawValue, forKey: .dataType)
         try container.encode(category, forKey: .category)
         try container.encode(name, forKey: .name)
         try container.encode(value, forKey: .value)
@@ -196,7 +196,7 @@ public class FloatParameter: Parameter, Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uuid, forKey: .uuid)
-        try container.encode(dataType, forKey: .dataType)
+        try container.encode(dataType.rawValue, forKey: .dataType)
         try container.encode(category, forKey: .category)
         try container.encode(name, forKey: .name)
         try container.encode(minValue, forKey: .minValue)
@@ -272,7 +272,7 @@ public class IntParameter: Parameter, Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uuid, forKey: .uuid)
-        try container.encode(dataType, forKey: .dataType)
+        try container.encode(dataType.rawValue, forKey: .dataType)
         try container.encode(category, forKey: .category)
         try container.encode(name, forKey: .name)
         try container.encode(minValue, forKey: .minValue)
@@ -346,7 +346,7 @@ public class PickerParameter: NSObject, Parameter, Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uuid, forKey: .uuid)
-        try container.encode(dataType, forKey: .dataType)
+        try container.encode(dataType.rawValue, forKey: .dataType)
         try container.encode(category, forKey: .category)
         try container.encode(name, forKey: .name)
         try container.encode(minValue, forKey: .minValue)
@@ -439,7 +439,7 @@ public class StringParameter: Parameter, Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uuid, forKey: .uuid)
-        try container.encode(dataType, forKey: .dataType)
+        try container.encode(dataType.rawValue, forKey: .dataType)
         try container.encode(category, forKey: .category)
         try container.encode(name, forKey: .name)
         try container.encode(value, forKey: .value)
@@ -510,7 +510,7 @@ public class ColorParameter: Parameter, Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uuid, forKey: .uuid)
-        try container.encode(dataType, forKey: .dataType)
+        try container.encode(dataType.rawValue, forKey: .dataType)
         try container.encode(category, forKey: .category)
         try container.encode(name, forKey: .name)
         if let stringValue = value.toHex {
@@ -580,7 +580,7 @@ public class SegmentedParameter: Parameter, Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uuid, forKey: .uuid)
-        try container.encode(dataType, forKey: .dataType)
+        try container.encode(dataType.rawValue, forKey: .dataType)
         try container.encode(category, forKey: .category)
         try container.encode(name, forKey: .name)
         try container.encode(value, forKey: .value)
@@ -638,7 +638,7 @@ public class StaticTextParameter: Parameter, Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uuid, forKey: .uuid)
-        try container.encode(dataType, forKey: .dataType)
+        try container.encode(dataType.rawValue, forKey: .dataType)
         try container.encode(category, forKey: .category)
         try container.encode(name, forKey: .name)
         try container.encode(value, forKey: .value)
