@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class ParametersViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+public class ParametersViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     class var backgroundColor: UIColor {
         if #available(iOS 13.0, *) {
             return UIColor.systemBackground
@@ -63,7 +63,7 @@ class ParametersViewController: UIViewController, UITableViewDataSource, UITable
 
     private var selectedIndexPath: IndexPath?
 
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         // Debug Options
@@ -75,17 +75,17 @@ class ParametersViewController: UIViewController, UITableViewDataSource, UITable
 //        }).disposed(by: disposeBag)
     }
 
-    func numberOfSections(in tableView: UITableView) -> Int {
+    public func numberOfSections(in tableView: UITableView) -> Int {
         return allCategories?.count ?? 0
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let allCategories = allCategories else { return 0 }
         let category = allCategories[section]
         return category.disclosed ? category.entries.count : 1
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell
 
         if let allCategories = allCategories {
@@ -159,7 +159,7 @@ class ParametersViewController: UIViewController, UITableViewDataSource, UITable
         return cell
     }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 
         guard let allCategories = allCategories else { return 48 }
 
@@ -182,7 +182,7 @@ class ParametersViewController: UIViewController, UITableViewDataSource, UITable
         return 48
     }
 
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let backgroundView = UIView()
         backgroundView.backgroundColor = UIColor.groupTableViewBackground
 
@@ -208,12 +208,12 @@ class ParametersViewController: UIViewController, UITableViewDataSource, UITable
         return backgroundView
     }
 
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard section > 0 else { return 0 }
         return 36.0
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedIndexPath = indexPath
 
         tableView.deselectRow(at: indexPath, animated: true)
@@ -232,7 +232,7 @@ class ParametersViewController: UIViewController, UITableViewDataSource, UITable
     let tableView: UITableView = UITableView()
     let tableViewController: UIViewController = UIViewController()
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         tableViewController.view.addSubview(tableView)
@@ -278,7 +278,7 @@ class ParametersViewController: UIViewController, UITableViewDataSource, UITable
         startObservingKeyboardEvents()
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
+    public override func viewDidDisappear(_ animated: Bool) {
         //Save The Parameters to disk (call delegate method) Settings.shared.saveParameters()
     }
 

@@ -7,9 +7,8 @@
 //
 
 import UIKit
-import Parameters
 
-class CodableParameter: Codable {
+public class CodableParameter: Codable {
 
     private enum CodingKeys: String, CodingKey {
         case dataType
@@ -26,7 +25,7 @@ class CodableParameter: Codable {
         self.value = parameter
     }
 
-    required init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let dataType = try container.decode(ParameterDataType.self, forKey: .dataType)
 
@@ -50,7 +49,7 @@ class CodableParameter: Codable {
         }
     }
 
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(value.dataType, forKey: .dataType)
         switch value.dataType {

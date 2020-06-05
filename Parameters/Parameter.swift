@@ -9,14 +9,37 @@
 import Foundation
 import UIKit
 
-// TODO
-// 1. Remote Parameters
-
-struct ParameterCategory {
+public struct ParameterCategory: Codable {
     let name: String
     let entries: [Parameter]
     let isDebug: Bool
     var disclosed: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case name
+        case entries
+        case isDebug
+        case disclosed
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.name = try container.decode(String.self, forKey: .name)
+        let codableParameters = try container.decode([CodableParameter].self, forKey: .entries)
+
+        self.entries = codableParameters.map({ return $0.value })
+        self.isDebug = try container.decode(Bool.self, forKey: .isDebug)
+        self.disclosed = try container.decode(Bool.self, forKey: .disclosed)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(name, forKey: .name)
+        let codableParameters = entries.map { CodableParameter(parameter: $0) }
+        try container.encode(codableParameters, forKey: .entries)
+        try container.encode(isDebug, forKey: .isDebug)
+        try container.encode(disclosed, forKey: .disclosed)
+    }
 
     init(name: String, entries: [Parameter], isDebug: Bool = false, disclosed: Bool = false) {
         self.name = name

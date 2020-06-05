@@ -39,12 +39,8 @@ public class RemoteParameters: NSObject, RemoteParameterSessionDelegate {
     public func session(_ session: RemoteParameterSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         if state == .connected {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                if let parameters = self.dataSource?.remoteParameterList(self) {
-                    let codableParameters = parameters.map { parameter -> CodableParameter in
-                        return CodableParameter(parameter: parameter)
-                    }
-
-                    if let session = self.remoteParameterSession?.session, let encodedData = try? JSONEncoder().encode(codableParameters) {
+                if let parameterCategories = self.dataSource?.remoteParameterList(self) {
+                    if let session = self.remoteParameterSession?.session, let encodedData = try? JSONEncoder().encode(parameterCategories) {
                         print("\(encodedData.count)")
                         do {
                             try session.send(encodedData, toPeers: session.connectedPeers, with: .unreliable)
@@ -62,10 +58,9 @@ public class RemoteParameters: NSObject, RemoteParameterSessionDelegate {
 
         // reconstitute the parameters
         do {
-            let codedParameters = try JSONDecoder().decode(Array<CodableParameter>.self, from: data)
-            let parameters = codedParameters.map { $0.value }
+            let decodedParameters = try JSONDecoder().decode([ParameterCategory].self, from: data)
             DispatchQueue.main.async {
-                self.dataSource?.remoteParametersDidUpdate(self, parameters: parameters)
+                self.dataSource?.remoteParametersDidUpdate(self, parameters: decodedParameters)
             }
         } catch {
             print("deserialization error: \(error)")
@@ -74,6 +69,6 @@ public class RemoteParameters: NSObject, RemoteParameterSessionDelegate {
 }
 
 public protocol RemoteParametersDataSource: class {
-    func remoteParameterList(_ remoteParameters: RemoteParameters) -> [Parameter]
-    func remoteParametersDidUpdate(_ remoteParameters: RemoteParameters, parameters: [Parameter])
+    func remoteParameterList(_ remoteParameters: RemoteParameters) -> [ParameterCategory]
+    func remoteParametersDidUpdate(_ remoteParameters: RemoteParameters, parameters: [ParameterCategory])
 }
