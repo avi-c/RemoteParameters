@@ -14,6 +14,30 @@ public struct ParameterSet: Codable {
     public let source: String // Local Prefs, Remote Prefs, Configuration Server, etc.
     public let categories: [ParameterCategory]
 
+    var allParameters: [Parameter] {
+        var entries = [Parameter]()
+
+        self.categories.forEach { category in
+            category.entries.forEach { parameter in
+                entries.append(parameter)
+            }
+        }
+
+        return entries
+    }
+
+    var hashedParameters: [String: Parameter] {
+        var entries = [String: Parameter]()
+
+        self.categories.forEach { category in
+            category.entries.forEach { parameter in
+                entries[parameter.uuid] = parameter
+            }
+        }
+
+        return entries
+    }
+
     enum CodingKeys: String, CodingKey {
         case version
         case source
@@ -223,6 +247,11 @@ public class FloatParameter: BaseParameter, Parameter, Codable {
         case defaultValue
     }
 
+    override public init() {
+        super.init()
+        revertToDefault()
+    }
+
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.dataType = .float
@@ -289,6 +318,11 @@ public class IntParameter: BaseParameter, Parameter, Codable {
         case precision
         case value
         case defaultValue
+    }
+
+    override public init() {
+        super.init()
+        revertToDefault()
     }
 
     public required init(from decoder: Decoder) throws {
@@ -380,6 +414,11 @@ public class PickerParameter: BaseParameter, Parameter, Codable {
         case stepValue
         case value
         case defaultValue
+    }
+
+    override public init() {
+        super.init()
+        revertToDefault()
     }
 
     public required init(from decoder: Decoder) throws {
@@ -475,6 +514,11 @@ public class StringParameter: BaseParameter, Parameter, Codable {
         case defaultValue
     }
 
+    override public init() {
+        super.init()
+        revertToDefault()
+    }
+
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.dataType = .string
@@ -532,6 +576,11 @@ public class ColorParameter: BaseParameter, Parameter, Codable {
         case name
         case value
         case defaultValue
+    }
+
+    override public init() {
+        super.init()
+        revertToDefault()
     }
 
     public required init(from decoder: Decoder) throws {
@@ -597,6 +646,11 @@ public class SegmentedParameter: BaseParameter, Parameter, Codable {
         case defaultValue
     }
 
+    override public init() {
+        super.init()
+        revertToDefault()
+    }
+
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.dataType = .segmented
@@ -652,6 +706,11 @@ public class StaticTextParameter: BaseParameter, Parameter, Codable {
         case category
         case name
         case value
+    }
+
+    override public init() {
+        super.init()
+        revertToDefault()
     }
 
     public required init(from decoder: Decoder) throws {
