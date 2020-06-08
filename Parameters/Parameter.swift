@@ -14,7 +14,7 @@ public struct ParameterSet: Codable {
     public let source: String // Local Prefs, Remote Prefs, Configuration Server, etc.
     public let categories: [ParameterCategory]
 
-    var allParameters: [Parameter] {
+    public var allParameters: [Parameter] {
         var entries = [Parameter]()
 
         self.categories.forEach { category in
@@ -26,7 +26,7 @@ public struct ParameterSet: Codable {
         return entries
     }
 
-    var hashedParameters: [String: Parameter] {
+    public var hashedParameters: [String: Parameter] {
         var entries = [String: Parameter]()
 
         self.categories.forEach { category in
