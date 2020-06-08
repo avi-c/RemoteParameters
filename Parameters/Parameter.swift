@@ -97,26 +97,46 @@ public protocol Parameter {
     var category: String { get set }
     var name: String { get set }
     var dataType: ParameterDataType { get set }
+    var isNumeric: Bool { get }
 
     var observers: [ParameterObserver] { get }
+    func add(observer: ParameterObserver)
+    func remove(observer: ParameterObserver)
 
-    func isNumeric() -> Bool
     func revertToDefault()
 }
 
 public protocol ParameterObserver {
+    var identifier: String { get }
+
     func didUpdate(parameter: Parameter)
 }
 
-public class BoolParameter: Parameter, Codable {
+public class BaseParameter: NSObject {
+
+    public var observers = [ParameterObserver]()
+
+    public func add(observer: ParameterObserver) {
+        observers.append(observer)
+    }
+
+    public func remove(observer: ParameterObserver) {
+        observers.removeAll { existingObserver -> Bool in
+            return existingObserver.identifier == observer.identifier
+        }
+    }
+}
+
+public class BoolParameter: BaseParameter, Parameter, Codable {
     public var uuid: String { return category + "-" + name }
     public var dataType: ParameterDataType = .bool
     public var persisted: Bool = true
     public var category: String = ""
     public var name: String = ""
+    public var isNumeric: Bool = false
     public var value: Bool = false {
         didSet {
-            observers.forEach { (observer) in
+            self.observers.forEach { (observer) in
                 observer.didUpdate(parameter: self)
             }
         }
@@ -127,12 +147,6 @@ public class BoolParameter: Parameter, Codable {
         }
     }
 
-    public init() {
-        revertToDefault()
-    }
-
-    public var observers = [ParameterObserver]()
-
     enum CodingKeys: String, CodingKey {
         case uuid
         case dataType
@@ -140,6 +154,11 @@ public class BoolParameter: Parameter, Codable {
         case name
         case value
         case defaultValue
+    }
+
+    override public init() {
+        super.init()
+        revertToDefault()
     }
 
     public required init(from decoder: Decoder) throws {
@@ -161,21 +180,18 @@ public class BoolParameter: Parameter, Codable {
         try container.encode(defaultValue, forKey: .defaultValue)
     }
 
-    public func isNumeric() -> Bool {
-        return false
-    }
-
     public func revertToDefault() {
         self.value = defaultValue
     }
 }
 
-public class FloatParameter: Parameter, Codable {
+public class FloatParameter: BaseParameter, Parameter, Codable {
     public var uuid: String { return category + "-" + name }
     public var dataType: ParameterDataType = .float
     public var persisted: Bool = true
     public var category: String = ""
     public var name: String = ""
+    public var isNumeric: Bool = true
     public var minValue: Float = Float(0)
     public var maxValue: Float = Float(10)
     public var stepValue: Float = Float(0.5)
@@ -187,16 +203,11 @@ public class FloatParameter: Parameter, Codable {
             }
         }
     }
+
     public var defaultValue: Float = Float(0) {
         didSet {
             revertToDefault()
         }
-    }
-
-    public var observers = [ParameterObserver]()
-
-    public init() {
-        revertToDefault()
     }
 
     enum CodingKeys: String, CodingKey {
@@ -239,21 +250,18 @@ public class FloatParameter: Parameter, Codable {
         try container.encode(defaultValue, forKey: .defaultValue)
     }
 
-    public func isNumeric() -> Bool {
-        return true
-    }
-
     public func revertToDefault() {
         value = defaultValue
     }
 }
 
-public class IntParameter: Parameter, Codable {
+public class IntParameter: BaseParameter, Parameter, Codable {
     public var uuid: String { return category + "-" + name }
     public var dataType: ParameterDataType = .int
     public var persisted: Bool = true
     public var category: String = ""
     public var name: String = ""
+    public var isNumeric: Bool = true
     public var minValue: Int = Int(0)
     public var maxValue: Int = Int(10)
     public var stepValue: Int = Int(1)
@@ -268,12 +276,6 @@ public class IntParameter: Parameter, Codable {
         didSet {
             revertToDefault()
         }
-    }
-
-    public var observers = [ParameterObserver]()
-
-    public init() {
-        revertToDefault()
     }
 
     enum CodingKeys: String, CodingKey {
@@ -314,10 +316,6 @@ public class IntParameter: Parameter, Codable {
         try container.encode(defaultValue, forKey: .defaultValue)
     }
 
-    public func isNumeric() -> Bool {
-        return true
-    }
-
     public func revertToDefault() {
         value = defaultValue
     }
@@ -345,12 +343,13 @@ public class PickerItem: NSObject, Codable {
     }
 }
 
-public class PickerParameter: NSObject, Parameter, Codable {
+public class PickerParameter: BaseParameter, Parameter, Codable {
     public var uuid: String { return category + "-" + name }
     public var dataType: ParameterDataType = .picker
     public var persisted: Bool = true
     public var category: String = ""
     public var name: String = ""
+    public var isNumeric: Bool = false
     public var pickerItems: [PickerItem]?   // List of items
     public var minValue: Int = Int(0)
     public var maxValue: Int = Int(10)
@@ -368,8 +367,6 @@ public class PickerParameter: NSObject, Parameter, Codable {
             revertToDefault()
         }
     }
-
-    public var observers = [ParameterObserver]()
 
     enum CodingKeys: String, CodingKey {
         case uuid
@@ -410,10 +407,6 @@ public class PickerParameter: NSObject, Parameter, Codable {
         try container.encode(stepValue, forKey: .stepValue)
         try container.encode(value, forKey: .value)
         try container.encode(defaultValue, forKey: .defaultValue)
-    }
-
-    public func isNumeric() -> Bool {
-        return false
     }
 
     public func revertToDefault() {
@@ -458,12 +451,13 @@ extension PickerParameter: UIPickerViewDelegate {
     }
 }
 
-public class StringParameter: Parameter, Codable {
+public class StringParameter: BaseParameter, Parameter, Codable {
     public var uuid: String { return category + "-" + name }
     public var dataType: ParameterDataType = .string
     public var persisted: Bool = true
     public var category: String = ""
     public var name: String = ""
+    public var isNumeric: Bool = false
     public var value: String = "" {
         didSet {
             observers.forEach { (observer) in
@@ -471,8 +465,6 @@ public class StringParameter: Parameter, Codable {
             }
         }
     }
-
-    public var observers = [ParameterObserver]()
 
     enum CodingKeys: String, CodingKey {
         case uuid
@@ -508,25 +500,18 @@ public class StringParameter: Parameter, Codable {
         }
     }
 
-    public init() {
-        revertToDefault()
-    }
-
-    public func isNumeric() -> Bool {
-        return false
-    }
-
     public func revertToDefault() {
         value = defaultValue
     }
 }
 
-public class ColorParameter: Parameter, Codable {
+public class ColorParameter: BaseParameter, Parameter, Codable {
     public var uuid: String { return category + "-" + name }
     public var dataType: ParameterDataType = .color
     public var persisted: Bool = true
     public var category: String = ""
     public var name: String = ""
+    public var isNumeric: Bool = false
     public var value: UIColor = UIColor.white {
         didSet {
             observers.forEach { (observer) in
@@ -539,8 +524,6 @@ public class ColorParameter: Parameter, Codable {
             revertToDefault()
         }
     }
-
-    public var observers = [ParameterObserver]()
 
     enum CodingKeys: String, CodingKey {
         case uuid
@@ -578,25 +561,18 @@ public class ColorParameter: Parameter, Codable {
         }
     }
 
-    public init() {
-        revertToDefault()
-    }
-
-    public func isNumeric() -> Bool {
-        return false
-    }
-
     public func revertToDefault() {
         value = defaultValue
     }
 }
 
-public class SegmentedParameter: Parameter, Codable {
+public class SegmentedParameter: BaseParameter, Parameter, Codable {
     public var uuid: String { return category + "-" + name }
     public var dataType: ParameterDataType = .segmented
     public var persisted: Bool = true
     public var category: String = ""
     public var name: String = ""
+    public var isNumeric: Bool = false
     public var titles: [String]!
     public var value: Int = 0 {
        didSet {
@@ -610,8 +586,6 @@ public class SegmentedParameter: Parameter, Codable {
             revertToDefault()
         }
     }
-
-    public var observers = [ParameterObserver]()
 
     enum CodingKeys: String, CodingKey {
         case uuid
@@ -647,11 +621,8 @@ public class SegmentedParameter: Parameter, Codable {
 
     init(titles: [String]) {
         self.titles = titles
+        super.init()
         revertToDefault()
-    }
-
-    public func isNumeric() -> Bool {
-        return false
     }
 
     public func revertToDefault() {
@@ -659,12 +630,14 @@ public class SegmentedParameter: Parameter, Codable {
     }
 }
 
-public class StaticTextParameter: Parameter, Codable {
+public class StaticTextParameter: BaseParameter, Parameter, Codable {
+
     public var uuid: String { return category + "-" + name }
     public var dataType: ParameterDataType = .staticText
     public var persisted: Bool = true
     public var category: String = ""
     public var name: String = ""
+    public var isNumeric: Bool = false
     public var value: String = "" {
         didSet {
             observers.forEach { (observer) in
@@ -672,8 +645,6 @@ public class StaticTextParameter: Parameter, Codable {
             }
         }
     }
-
-    public var observers = [ParameterObserver]()
 
     enum CodingKeys: String, CodingKey {
         case uuid
@@ -698,14 +669,6 @@ public class StaticTextParameter: Parameter, Codable {
         try container.encode(category, forKey: .category)
         try container.encode(name, forKey: .name)
         try container.encode(value, forKey: .value)
-    }
-
-    public init() {
-        revertToDefault()
-    }
-
-    public func isNumeric() -> Bool {
-        return false
     }
 
     public func revertToDefault() {

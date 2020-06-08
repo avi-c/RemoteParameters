@@ -187,7 +187,7 @@ public class ParametersViewController: UIViewController, UITableViewDataSource, 
 
             if parameter.dataType == .picker {
                 return ParametersViewController.pickerViewHeight
-            } else if parameter.isNumeric() {
+            } else if parameter.isNumeric {
                 return 120
             } else if parameter.dataType == .string {
                 return 80
@@ -513,7 +513,7 @@ class ParameterCellView: UITableViewCell, UITextFieldDelegate {
         segmentedControl.isHidden = true
         pickerView.isHidden = true
 
-        if parameter.isNumeric() {
+        if parameter.isNumeric {
             switchControl.isHidden = true
             slider.isHidden = false
             stepper.isHidden = false
