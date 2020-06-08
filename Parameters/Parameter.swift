@@ -9,6 +9,32 @@
 import Foundation
 import UIKit
 
+public struct ParameterSet: Codable {
+    public let version: String // For versioned parameters/preferences
+    public let source: String // Local Prefs, Remote Prefs, Configuration Server, etc.
+    public let categories: [ParameterCategory]
+
+    enum CodingKeys: String, CodingKey {
+        case version
+        case source
+        case categories
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.version = try container.decode(String.self, forKey: .version)
+        self.source = try container.decode(String.self, forKey: .source)
+        self.categories = try container.decode([ParameterCategory].self, forKey: .categories)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(version, forKey: .version)
+        try container.encode(source, forKey: .source)
+        try container.encode(categories, forKey: .categories)
+    }
+}
+
 public struct ParameterCategory: Codable {
     public let name: String
     public let entries: [Parameter]
@@ -291,13 +317,35 @@ public class IntParameter: Parameter, Codable {
     }
 }
 
+public class PickerItem: NSObject, Codable {
+    public let displayName: String // String to display in the picker UI, e.g. name of a server
+    public let value: String // Value corresponding to the name, e.g. IP Address of the named server
+
+    enum CodingKeys: String, CodingKey {
+        case displayName
+        case value
+    }
+
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.displayName = try container.decode(String.self, forKey: .displayName)
+        self.value = try container.decode(String.self, forKey: .value)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(displayName, forKey: .displayName)
+        try container.encode(value, forKey: .value)
+    }
+}
+
 public class PickerParameter: NSObject, Parameter, Codable {
     public var uuid: String { return category + "-" + name }
     public var dataType: ParameterDataType = .picker
     public var persisted: Bool = true
     public var category: String = ""
     public var name: String = ""
-    public var pickerItems: [String]?
+    public var pickerItems: [PickerItem]?   // List of items
     public var minValue: Int = Int(0)
     public var maxValue: Int = Int(10)
     public var stepValue: Int = Int(1)
@@ -323,6 +371,7 @@ public class PickerParameter: NSObject, Parameter, Codable {
         case category
         case name
         case pickerItems
+        case pickerValues
         case minValue
         case maxValue
         case stepValue
@@ -335,7 +384,7 @@ public class PickerParameter: NSObject, Parameter, Codable {
         self.dataType = .picker
         self.category = try container.decode(String.self, forKey: .category)
         self.name = try container.decode(String.self, forKey: .name)
-        self.pickerItems = try container.decodeIfPresent([String].self, forKey: .pickerItems)
+        self.pickerItems = try container.decodeIfPresent([PickerItem].self, forKey: .pickerItems)
         self.minValue = try container.decode(Int.self, forKey: .minValue)
         self.maxValue = try container.decode(Int.self, forKey: .maxValue)
         self.stepValue = try container.decode(Int.self, forKey: .stepValue)
@@ -349,6 +398,7 @@ public class PickerParameter: NSObject, Parameter, Codable {
         try container.encode(dataType.rawValue, forKey: .dataType)
         try container.encode(category, forKey: .category)
         try container.encode(name, forKey: .name)
+        try container.encode(pickerItems, forKey: .pickerItems)
         try container.encode(minValue, forKey: .minValue)
         try container.encode(maxValue, forKey: .maxValue)
         try container.encode(stepValue, forKey: .stepValue)
@@ -380,7 +430,7 @@ extension PickerParameter: UIPickerViewDelegate {
 
     public func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         guard let pickerItems = pickerItems, component == 0, row < pickerItems.count else { return nil }
-        return pickerItems[row]
+        return pickerItems[row].displayName
     }
 
     public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {

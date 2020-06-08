@@ -39,8 +39,8 @@ public class RemoteParameters: NSObject, RemoteParameterSessionDelegate {
     public func session(_ session: RemoteParameterSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         if state == .connected {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                if let parameterCategories = self.dataSource?.remoteParameterList(self) {
-                    if let session = self.remoteParameterSession?.session, let encodedData = try? JSONEncoder().encode(parameterCategories) {
+                if let parameterSet = self.dataSource?.parameterSet(self) {
+                    if let session = self.remoteParameterSession?.session, let encodedData = try? JSONEncoder().encode(parameterSet) {
                         print("\(encodedData.count)")
                         do {
                             try session.send(encodedData, toPeers: session.connectedPeers, with: .unreliable)
@@ -58,9 +58,9 @@ public class RemoteParameters: NSObject, RemoteParameterSessionDelegate {
 
         // reconstitute the parameters
         do {
-            let decodedParameters = try JSONDecoder().decode([ParameterCategory].self, from: data)
+            let decodedParameters = try JSONDecoder().decode(ParameterSet.self, from: data)
             DispatchQueue.main.async {
-                self.dataSource?.remoteParametersDidUpdate(self, parameterCategories: decodedParameters)
+                self.dataSource?.remoteParametersDidUpdate(self, parameterSet: decodedParameters)
             }
         } catch {
             print("deserialization error: \(error)")
@@ -69,6 +69,6 @@ public class RemoteParameters: NSObject, RemoteParameterSessionDelegate {
 }
 
 public protocol RemoteParametersDataSource: class {
-    func remoteParameterList(_ remoteParameters: RemoteParameters) -> [ParameterCategory]
-    func remoteParametersDidUpdate(_ remoteParameters: RemoteParameters, parameterCategories: [ParameterCategory])
+    func parameterSet(_ remoteParameters: RemoteParameters) -> ParameterSet
+    func remoteParametersDidUpdate(_ remoteParameters: RemoteParameters, parameterSet: ParameterSet)
 }
