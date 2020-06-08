@@ -364,6 +364,12 @@ public class PickerItem: NSObject, Codable {
         case value
     }
 
+    public init(displayName: String, value: String) {
+        self.displayName = displayName
+        self.value = value
+        super.init()
+    }
+
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.displayName = try container.decode(String.self, forKey: .displayName)
