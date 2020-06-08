@@ -20,6 +20,12 @@ public struct ParameterSet: Codable {
         case categories
     }
 
+    public init(version: String, source: String, categories: [ParameterCategory]) {
+        self.version = version
+        self.source = source
+        self.categories = categories
+    }
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.version = try container.decode(String.self, forKey: .version)
