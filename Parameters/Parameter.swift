@@ -357,14 +357,14 @@ public class IntParameter: BaseParameter, Parameter, Codable {
 
 public class PickerItem: NSObject, Codable {
     public let displayName: String // String to display in the picker UI, e.g. name of a server
-    public let value: String // Value corresponding to the name, e.g. IP Address of the named server
+    public let value: String? // An optional value corresponding to the name, e.g. IP Address of the named server
 
     enum CodingKeys: String, CodingKey {
         case displayName
         case value
     }
 
-    public init(displayName: String, value: String) {
+    public init(displayName: String, value: String?) {
         self.displayName = displayName
         self.value = value
         super.init()
@@ -373,13 +373,13 @@ public class PickerItem: NSObject, Codable {
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.displayName = try container.decode(String.self, forKey: .displayName)
-        self.value = try container.decode(String.self, forKey: .value)
+        self.value = try container.decodeIfPresent(String.self, forKey: .value)
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(displayName, forKey: .displayName)
-        try container.encode(value, forKey: .value)
+        try container.encodeIfPresent(value, forKey: .value)
     }
 }
 
