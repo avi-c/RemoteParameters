@@ -160,7 +160,8 @@ public class BoolParameter: BaseParameter, Parameter, Codable {
     public var isNumeric: Bool = false
     public var value: Bool = false {
         didSet {
-            self.observers.forEach { (observer) in
+            guard oldValue != value else { return }
+            observers.forEach { (observer) in
                 observer.didUpdate(parameter: self)
             }
         }
@@ -222,6 +223,7 @@ public class FloatParameter: BaseParameter, Parameter, Codable {
     public var precision: Float = Float(0.1)
     public var value: Float = Float(0.0) {
         didSet {
+            guard oldValue != value else { return }
             observers.forEach { (observer) in
                 observer.didUpdate(parameter: self)
             }
@@ -296,6 +298,7 @@ public class IntParameter: BaseParameter, Parameter, Codable {
     public var stepValue: Int = Int(1)
     public var value: Int = Int(0) {
         didSet {
+            guard oldValue != value else { return }
             observers.forEach { (observer) in
                 observer.didUpdate(parameter: self)
             }
@@ -396,6 +399,7 @@ public class PickerParameter: BaseParameter, Parameter, Codable {
     public var stepValue: Int = Int(1)
     public var value: Int = Int(0) {
         didSet {
+            guard oldValue != value else { return }
             observers.forEach { (observer) in
                 observer.didUpdate(parameter: self)
             }
@@ -505,6 +509,7 @@ public class StringParameter: BaseParameter, Parameter, Codable {
     public var isNumeric: Bool = false
     public var value: String = "" {
         didSet {
+            guard oldValue != value else { return }
             observers.forEach { (observer) in
                 observer.didUpdate(parameter: self)
             }
@@ -564,6 +569,7 @@ public class ColorParameter: BaseParameter, Parameter, Codable {
     public var isNumeric: Bool = false
     public var value: UIColor = UIColor.white {
         didSet {
+            guard oldValue != value else { return }
             observers.forEach { (observer) in
                 observer.didUpdate(parameter: self)
             }
@@ -630,7 +636,8 @@ public class SegmentedParameter: BaseParameter, Parameter, Codable {
     public var isNumeric: Bool = false
     public var titles: [String]!
     public var value: Int = 0 {
-       didSet {
+        didSet {
+            guard oldValue != value else { return }
             observers.forEach { (observer) in
                 observer.didUpdate(parameter: self)
             }
@@ -700,6 +707,7 @@ public class StaticTextParameter: BaseParameter, Parameter, Codable {
     public var isNumeric: Bool = false
     public var value: String = "" {
         didSet {
+            guard oldValue != value else { return }
             observers.forEach { (observer) in
                 observer.didUpdate(parameter: self)
             }
