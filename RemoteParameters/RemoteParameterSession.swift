@@ -28,6 +28,10 @@ public class RemoteParameterSession: NSObject, MCSessionDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        self.session.disconnect()
+    }
+
     private func receive(data: Data, from peerID: MCPeerID) {
 
     }
