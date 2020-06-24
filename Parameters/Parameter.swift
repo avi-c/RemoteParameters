@@ -134,6 +134,7 @@ public protocol ParameterObserver {
     var identifier: String { get }
 
     func didUpdate(parameter: Parameter)
+    func didSelect(parameter: Parameter)
 }
 
 public class BaseParameter: NSObject {

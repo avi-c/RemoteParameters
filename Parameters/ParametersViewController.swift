@@ -235,14 +235,22 @@ public class ParametersViewController: UIViewController, UITableViewDataSource, 
 
         tableView.deselectRow(at: indexPath, animated: true)
 
-        // push on a VC for this parameter set
-        if let category = parameterCategory(for: indexPath), category.disclosed == false {
-            let parametersViewController = ParametersViewController()
-            var singleCategory = category
-            singleCategory.disclosed = true
-            parametersViewController.title = singleCategory.name
-            parametersViewController.parameters = [singleCategory]
-            self.navigationController?.pushViewController(parametersViewController, animated: true)
+
+        if let category = parameterCategory(for: indexPath) {
+            if category.disclosed {
+                let parameter = category.entries[indexPath.row]
+                parameter.observers.forEach { observer in
+                    observer.didSelect(parameter: parameter)
+                }
+            } else {
+                // push on a VC for this parameter set
+                let parametersViewController = ParametersViewController()
+                var singleCategory = category
+                singleCategory.disclosed = true
+                parametersViewController.title = singleCategory.name
+                parametersViewController.parameters = [singleCategory]
+                self.navigationController?.pushViewController(parametersViewController, animated: true)
+            }
         }
     }
 
