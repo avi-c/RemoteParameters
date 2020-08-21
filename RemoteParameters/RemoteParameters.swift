@@ -7,7 +7,9 @@
 //
 
 import Foundation
-import Parameters
+#if canImport(Parameters)
+    import Parameters
+#endif
 import MultipeerConnectivity
 
 struct RemoteParameterAttribute {
