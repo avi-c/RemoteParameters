@@ -91,7 +91,13 @@ public struct ParameterCategory: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(name, forKey: .name)
-        let codableParameters = entries.map { CodableParameter(parameter: $0) }
+        let persistedParameters = entries.compactMap { parameter -> Parameter? in
+            if parameter.persisted {
+                return parameter
+            }
+            return nil
+        }
+        let codableParameters = persistedParameters.map { CodableParameter(parameter: $0) }
         try container.encode(codableParameters, forKey: .entries)
         try container.encode(isDebug, forKey: .isDebug)
         try container.encode(disclosed, forKey: .disclosed)
@@ -122,6 +128,7 @@ public protocol Parameter {
     var name: String { get set }
     var dataType: ParameterDataType { get set }
     var isNumeric: Bool { get }
+    var persisted: Bool { get set }
 
     var observers: [ParameterObserver] { get }
     func add(observer: ParameterObserver)
@@ -196,6 +203,7 @@ public class BoolParameter: BaseParameter, Parameter, Codable {
     }
 
     public func encode(to encoder: Encoder) throws {
+        guard persisted == true else { return }
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uuid, forKey: .uuid)
         try container.encode(dataType.rawValue, forKey: .dataType)
@@ -268,6 +276,7 @@ public class FloatParameter: BaseParameter, Parameter, Codable {
     }
 
     public func encode(to encoder: Encoder) throws {
+        guard persisted == true else { return }
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uuid, forKey: .uuid)
         try container.encode(dataType.rawValue, forKey: .dataType)
@@ -341,6 +350,7 @@ public class IntParameter: BaseParameter, Parameter, Codable {
     }
 
     public func encode(to encoder: Encoder) throws {
+        guard persisted == true else { return }
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uuid, forKey: .uuid)
         try container.encode(dataType.rawValue, forKey: .dataType)
@@ -445,6 +455,7 @@ public class PickerParameter: BaseParameter, Parameter, Codable {
     }
 
     public func encode(to encoder: Encoder) throws {
+        guard persisted == true else { return }
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uuid, forKey: .uuid)
         try container.encode(dataType.rawValue, forKey: .dataType)
@@ -540,6 +551,7 @@ public class StringParameter: BaseParameter, Parameter, Codable {
     }
 
     public func encode(to encoder: Encoder) throws {
+        guard persisted == true else { return }
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uuid, forKey: .uuid)
         try container.encode(dataType.rawValue, forKey: .dataType)
@@ -608,6 +620,7 @@ public class ColorParameter: BaseParameter, Parameter, Codable {
     }
 
     public func encode(to encoder: Encoder) throws {
+        guard persisted == true else { return }
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uuid, forKey: .uuid)
         try container.encode(dataType.rawValue, forKey: .dataType)
@@ -675,6 +688,7 @@ public class SegmentedParameter: BaseParameter, Parameter, Codable {
     }
 
     public func encode(to encoder: Encoder) throws {
+        guard persisted == true else { return }
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uuid, forKey: .uuid)
         try container.encode(dataType.rawValue, forKey: .dataType)
@@ -736,6 +750,7 @@ public class StaticTextParameter: BaseParameter, Parameter, Codable {
     }
 
     public func encode(to encoder: Encoder) throws {
+        guard persisted == true else { return }
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uuid, forKey: .uuid)
         try container.encode(dataType.rawValue, forKey: .dataType)
