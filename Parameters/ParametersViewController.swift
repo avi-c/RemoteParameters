@@ -166,6 +166,12 @@ public class ParametersViewController: UIViewController, UITableViewDataSource, 
                     cell = staticTextParameterCellView
 
                     return cell
+                } else if let staticLinkPref = parameter as? StaticLinkParameter {
+                    cell = tableView.dequeueReusableCell(withIdentifier: "StaticLinkParameterCell", for: indexPath)
+                    cell.textLabel?.text = staticLinkPref.name
+                    cell.accessoryType = .disclosureIndicator
+
+                    return cell
                 }
             }
         }
@@ -235,6 +241,13 @@ public class ParametersViewController: UIViewController, UITableViewDataSource, 
 
         tableView.deselectRow(at: indexPath, animated: true)
 
+        if let category = parameterCategory(for: indexPath),
+           category.disclosed == true,
+           let staticLinkPref = category.entries[indexPath.row] as? StaticLinkParameter,
+           let url = URL(string: staticLinkPref.url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+
         // push on a VC for this parameter set
         if let category = parameterCategory(for: indexPath), category.disclosed == false {
             let parametersViewController = ParametersViewController()
@@ -291,6 +304,7 @@ public class ParametersViewController: UIViewController, UITableViewDataSource, 
         tableView.register(SegmentedParameterCellView.self, forCellReuseIdentifier: "SegmentedParameterCell")
         tableView.register(PickerParameterCellView.self, forCellReuseIdentifier: "PickerParameterCell")
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ParameterCategoryCell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "StaticLinkParameterCell")
 
         startObservingKeyboardEvents()
     }

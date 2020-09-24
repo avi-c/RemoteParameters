@@ -120,6 +120,7 @@ public enum ParameterDataType: Int, Codable {
     case segmented = 5
     case staticText = 6
     case picker = 7
+    case staticLink = 8
 }
 
 public protocol Parameter {
@@ -761,4 +762,57 @@ public class StaticTextParameter: BaseParameter, Parameter, Codable {
 
     public func revertToDefault() {
     }
+}
+
+public class StaticLinkParameter: BaseParameter, Parameter, Codable {
+
+    public var uuid: String { return category + "-" + name }
+    public var dataType: ParameterDataType = .staticLink
+    public var persisted: Bool = true
+    public var category: String = ""
+    public var name: String = ""
+    public var isNumeric: Bool = false
+    public var url: String = "" {
+        didSet {
+            guard oldValue != url else { return }
+            observers.forEach { (observer) in
+                observer.didUpdate(parameter: self)
+            }
+        }
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case uuid
+        case dataType
+        case category
+        case name
+        case url
+    }
+
+    override public init() {
+        super.init()
+        revertToDefault()
+    }
+
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.dataType = .staticLink
+        self.category = try container.decode(String.self, forKey: .category)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.url = try container.decode(String.self, forKey: .url)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        guard persisted == true else { return }
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(uuid, forKey: .uuid)
+        try container.encode(dataType.rawValue, forKey: .dataType)
+        try container.encode(category, forKey: .category)
+        try container.encode(name, forKey: .name)
+        try container.encode(url, forKey: .url)
+    }
+
+    public func revertToDefault() {
+    }
+
 }

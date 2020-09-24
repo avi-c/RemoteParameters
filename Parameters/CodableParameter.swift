@@ -46,6 +46,8 @@ public class CodableParameter: Codable {
             value = try container.decode(StaticTextParameter.self, forKey: .value)
         case .picker:
             value = try container.decode(PickerParameter.self, forKey: .value)
+        case .staticLink:
+            value = try container.decode(StaticLinkParameter.self, forKey: .value)
         case .none:
             value = BoolParameter()
         }
@@ -71,6 +73,8 @@ public class CodableParameter: Codable {
             try container.encode(value as! StaticTextParameter, forKey: .value)
         case .picker:
             try container.encode(value as! PickerParameter, forKey: .value)
+        case .staticLink:
+            try container.encode(value as! StaticLinkParameter, forKey: .value)
         }
     }
 }
