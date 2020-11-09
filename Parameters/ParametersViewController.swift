@@ -724,7 +724,7 @@ class ParameterCellView: UITableViewCell, UITextFieldDelegate {
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
-        textfield.resignFirstResponder()
+        commitTextFieldValue()
     }
 
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
@@ -732,7 +732,7 @@ class ParameterCellView: UITableViewCell, UITextFieldDelegate {
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        commitTextFieldValue()
+        textfield.resignFirstResponder()
         return true
     }
 }
