@@ -24,9 +24,6 @@ Pod::Spec.new do |spec|
                        "Sources/**/*.{swift}",
 
   spec.framework  = "MultipeerConnectivity"
-  spec.dependency 'RxSwift', '~> 4.0'
-  spec.dependency 'RxCocoa', '~> 4.0'
-  spec.dependency 'RxOptional', '~> 3.6'
 
   spec.requires_arc = true  
   spec.swift_version = "4.2"
