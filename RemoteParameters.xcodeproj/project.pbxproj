@@ -28,9 +28,7 @@
 		F43758B9223070C4006307D0 /* RemoteParameterReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteParameterReceiver.swift; sourceTree = "<group>"; };
 		F43758C2223070D7006307D0 /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
 		F43758CB22307CC3006307D0 /* RemoteParameterAdvertiser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteParameterAdvertiser.swift; sourceTree = "<group>"; };
-		F495C2D02488A75300A8FE78 /* Parameters.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Parameters.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F495C2D32488A75300A8FE78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F4EF2042259BB8D2004C7A32 /* Parameters */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Parameters; path = ../../../../../Desktop/Parameters; sourceTree = "<group>"; };
+		F4EF20B2259BC0CB004C7A32 /* Parameters */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Parameters; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,21 +41,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F495C2CD2488A75300A8FE78 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		F437589E22307033006307D0 = {
 			isa = PBXGroup;
 			children = (
+				F4EF20B2259BC0CB004C7A32 /* Parameters */,
 				F43758AA22307033006307D0 /* RemoteParameters */,
-				F495C2D12488A75300A8FE78 /* Parameters */,
 				F43758A922307033006307D0 /* Products */,
 				F43758C1223070D7006307D0 /* Frameworks */,
 			);
@@ -67,7 +58,6 @@
 			isa = PBXGroup;
 			children = (
 				F43758A822307033006307D0 /* RemoteParameters.framework */,
-				F495C2D02488A75300A8FE78 /* Parameters.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -96,27 +86,10 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		F495C2D12488A75300A8FE78 /* Parameters */ = {
-			isa = PBXGroup;
-			children = (
-				F4EF2042259BB8D2004C7A32 /* Parameters */,
-				F495C2D32488A75300A8FE78 /* Info.plist */,
-			);
-			name = Parameters;
-			path = Sources/Parameters;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
 		F43758A322307033006307D0 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F495C2CB2488A75300A8FE78 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -148,24 +121,6 @@
 			productReference = F43758A822307033006307D0 /* RemoteParameters.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		F495C2CF2488A75300A8FE78 /* Parameters */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F495C2D72488A75300A8FE78 /* Build configuration list for PBXNativeTarget "Parameters" */;
-			buildPhases = (
-				F495C2CB2488A75300A8FE78 /* Headers */,
-				F495C2CC2488A75300A8FE78 /* Sources */,
-				F495C2CD2488A75300A8FE78 /* Frameworks */,
-				F495C2CE2488A75300A8FE78 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Parameters;
-			productName = Parameters;
-			productReference = F495C2D02488A75300A8FE78 /* Parameters.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -177,10 +132,6 @@
 				TargetAttributes = {
 					F43758A722307033006307D0 = {
 						CreatedOnToolsVersion = 10.1;
-						LastSwiftMigration = 1150;
-					};
-					F495C2CF2488A75300A8FE78 = {
-						CreatedOnToolsVersion = 11.5;
 						LastSwiftMigration = 1150;
 					};
 				};
@@ -198,20 +149,12 @@
 			projectRoot = "";
 			targets = (
 				F43758A722307033006307D0 /* RemoteParameters */,
-				F495C2CF2488A75300A8FE78 /* Parameters */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		F43758A622307033006307D0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F495C2CE2488A75300A8FE78 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -231,13 +174,6 @@
 				F49D16862488B39300B14B67 /* RemoteParameters.swift in Sources */,
 				F49D16852488B38F00B14B67 /* RemoteParameterServerBrowser.swift in Sources */,
 				F49D16832488B38100B14B67 /* ParameterServer.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F495C2CC2488A75300A8FE78 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,58 +368,6 @@
 			};
 			name = Release;
 		};
-		F495C2D52488A75300A8FE78 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = GJZR2MEM28;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = Sources/Parameters/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mapbox.Parameters;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		F495C2D62488A75300A8FE78 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = GJZR2MEM28;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = Sources/Parameters/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mapbox.Parameters;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -501,15 +385,6 @@
 			buildConfigurations = (
 				F43758B122307033006307D0 /* Debug */,
 				F43758B222307033006307D0 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		F495C2D72488A75300A8FE78 /* Build configuration list for PBXNativeTarget "Parameters" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F495C2D52488A75300A8FE78 /* Debug */,
-				F495C2D62488A75300A8FE78 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
