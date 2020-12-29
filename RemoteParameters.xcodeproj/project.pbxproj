@@ -138,6 +138,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				F4EF209C259BBDA1004C7A32 /* PBXTargetDependency */,
 			);
 			name = RemoteParameters;
 			packageProductDependencies = (
@@ -241,6 +242,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F4EF209C259BBDA1004C7A32 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = F4EF209B259BBDA1004C7A32 /* Parameters */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		F43758AE22307033006307D0 /* Debug */ = {
@@ -510,6 +518,10 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		F4EF2047259BB93B004C7A32 /* Parameters */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Parameters;
+		};
+		F4EF209B259BBDA1004C7A32 /* Parameters */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Parameters;
 		};
