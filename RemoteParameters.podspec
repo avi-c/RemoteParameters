@@ -20,14 +20,10 @@ Pod::Spec.new do |spec|
 
   spec.platform     = :ios, "9.0"
   spec.source = { :git => "https://github.com/avi-c/RemoteParameters.git", :tag => "#{spec.version}" }
-  spec.source_files  = "RemoteParameters/*.{swift,h}", 
-                       "RemoteParameters/**/*.{swift}", 
-                       "Parameters/*.{swift,h}",
+  spec.source_files  = "Sources/*.{swift,h}", 
+                       "Sources/**/*.{swift}",
 
   spec.framework  = "MultipeerConnectivity"
-  spec.dependency 'RxSwift', '~> 4.0'
-  spec.dependency 'RxCocoa', '~> 4.0'
-  spec.dependency 'RxOptional', '~> 3.6'
 
   spec.requires_arc = true  
   spec.swift_version = "4.2"
